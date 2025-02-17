@@ -76,6 +76,18 @@ function UploadFile() {
     }
   
     console.log('Inserted tasks:', data);
+    await refreshTasks();
+
+  }
+
+  async function refreshTasks() {
+    try {
+      const response = await fetch("https://whatsappbot-task-management-be-production.up.railway.app/refresh");
+      const result = await response.json();
+      console.log("Tasks refreshed:", result);
+    } catch (error) {
+      console.error("Error refreshing tasks:", error);
+    }
   }
   
 
@@ -96,7 +108,7 @@ const containerStyle = {
   boxShadow: 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',
   height: '250px',
   margin: 'auto',
-  marginTop: '200px',
+  marginTop: '150px',
   width: '35%',
   display: 'flex',
   justifyContent: 'center',

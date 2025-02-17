@@ -18,6 +18,11 @@ function Table() {
 
     console.log(data);
 
+    if (!data || data.length === 0) {
+      alert('No data to display...')
+      return
+    }
+
     setAllTasks(data);
     setHeaders(Object.keys(data[0]));
   }
@@ -65,7 +70,7 @@ console.log(allTasks);
         <thead>
           <tr>
             {/* Render header row */}
-            {headers.map((header, index) => (
+            {headers.length > 0 && headers.map((header, index) => (
               <th key={index} style={tableHeaderStyle}>
                 {header}
               </th>
@@ -75,7 +80,7 @@ console.log(allTasks);
         </thead>
         <tbody>
           {/* Render each data row */}
-          {allTasks.map((row, rowIndex) => (
+          {allTasks.length > 0 && allTasks.map((row, rowIndex) => (
             <tr key={rowIndex}>
               <td style={tableCellStyle}> {row.id}</td>
               <td style={tableCellStyle}>
