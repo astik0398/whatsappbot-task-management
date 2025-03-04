@@ -1,0 +1,143 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 50px;
+    border: 4px dotted #ccc;
+    width: 40%;
+    margin: auto;
+    margin-top: 25vh;
+}
+
+.or-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #c1c0c0;
+    margin: 5px 0;
+    position: relative;
+  }
+  
+  .or-text::before,
+  .or-text::after {
+    content: '';
+    display: inline-block;
+    width: 50px;
+    height: 2px;
+    background-color: #ccc;
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+  
+  .button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 80%;
+  }
+  
+  .bulk-upload {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .bulk-upload:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-customer {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .add-customer:hover {
+    background-color: #1e7e34;
+  }
+  
+  .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 35%;
+}
+
+.button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.save {
+  background: green;
+  color: white;
+}
+
+.cancel {
+  background: red;
+  color: white;
+}
+
+.modal input{
+width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.btn-div{
+    display: flex;
+    justify-content: end;
+}
+
+/* Modal Close Button */
+.modal {
+    position: relative; /* Make the modal container relative so that the close button is positioned relative to it */
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px; /* Adjust the distance from the top */
+    right: 20px; /* Adjust the distance from the right */
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .modal-close:hover {
+    color: #f00; /* Red color on hover */
+  }
+  
+  .button-save{
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    background-color:#007bff;
+    color: white;
+    width: 40%;
+  }

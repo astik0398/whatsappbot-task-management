@@ -1,0 +1,63 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Dashboard Layout */
+.dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+  background-color: #334155;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f1f5f9;
+}
+
+.section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

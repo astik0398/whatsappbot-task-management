@@ -1,33 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import * as XLSX from 'xlsx'
-import Table from './Table'
-import supabase from '../supabaseClient'
+import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import Table from "./Table";
+import supabase from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
+import "../styles/UploadFile.css"; // Import external CSS
+import downloadIcon from '../assets/downloadIcon.svg'
+import csvIcon from '../assets/csvIcon.svg'
+import uploadIcon from '../assets/uploadIcon.svg'
 
-function UploadFile() {
+function UploadFile({setIsUploaded}) {
+  const [allData, setAllData] = useState([]);
+  const navigate = useNavigate();
 
-  const [allData, setAllData] = useState([])
+  function handleFileUpload(e) {
+    const file = e.target.files[0];
 
-  function handleFileUpload(e){
-    const file = e.target.files[0]
-
-    if(!file){
-      return
+    if (!file) {
+      return;
     }
-    
-    const reader = new FileReader()
 
-    console.log('reader', reader);
+    const reader = new FileReader();
+
+    console.log("reader", reader);
 
     reader.onerror = (error) => {
-      console.error('Error reading file:', error);
-    }
+      console.error("Error reading file:", error);
+    };
 
-    reader.onload = (e)=> {
-      const arrayBuffer = e.target.result
-      console.log('arraybuffer', arrayBuffer);
+    reader.onload = (e) => {
+      const arrayBuffer = e.target.result;
+      console.log("arraybuffer", arrayBuffer);
 
-      const workbook = XLSX.read(arrayBuffer, {type: 'array'})
-      console.log('workbook', workbook);
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      console.log("workbook", workbook);
 
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
@@ -35,101 +40,91 @@ function UploadFile() {
 
       const headers = jsonData[0];
 
-      const formattedData = jsonData.slice(1).map(row => {
+      const formattedData = jsonData.slice(1).map((row) => {
         let obj = {};
         headers.forEach((header, index) => {
-          obj[header] = row[index] || ''; // if there's no value, set it as an empty string
+          obj[header] = row[index] || ""; // if there's no value, set it as an empty string
         });
         return obj;
       });
-      
+
       console.log(formattedData);
 
-      setAllData(formattedData)
+      setAllData(formattedData);
 
       setTimeout(() => addTask(formattedData), 500);
+    };
 
-    }
-
-    reader.readAsArrayBuffer(file)
+    reader.readAsArrayBuffer(file);
   }
-
-  // useEffect(()=> {
-  //   if(allData.length> 0){
-  //     addTask(allData)
-  //   }
-  // }, [allData])
 
   async function addTask(dataArray) {
     if (!dataArray || dataArray.length === 0) {
       console.error("No data to insert!");
       return;
     }
-  
-    const { data, error } = await supabase
-      .from('tasks')
-      .insert(dataArray); // Pass the entire array for bulk insertion
-  
+
+    const { data, error } = await supabase.from("tasks").insert(dataArray);
+
     if (error) {
-      console.error('Error inserting tasks:', error);
+      console.error("Error inserting tasks:", error);
       throw error;
     }
-  
-    console.log('Inserted tasks:', data);
+
+    console.log("Inserted tasks:", data);
     await refreshTasks();
 
+    // navigate("/entries");
+    setIsUploaded(true)
   }
 
   async function refreshTasks() {
     try {
-      const response = await fetch("https://whatsappbot-task-management-be-production.up.railway.app/refresh");
+      const response = await fetch(
+        "https://whatsappbot-task-management-be-production.up.railway.app/refresh"
+      );
       const result = await response.json();
       console.log("Tasks refreshed:", result);
     } catch (error) {
       console.error("Error refreshing tasks:", error);
     }
   }
-  
 
   return (
-    <>
-    <div style={containerStyle}>
-        <label htmlFor="file-upload" style={labelStyle}>
-          Choose a file
-          <input onChange={handleFileUpload} accept='.csv, .xls, .xlsx' type="file" id="file-upload" name="file" style={inputStyle} />
-        </label>
+    <div className="upload-container">
+      <h2 className="section-title">Bulk Import</h2>
+
+      <div className="bulk-import-steps">
+        <div className="step">
+          <img src={downloadIcon} alt="Excel Icon" className="step-icon" />
+          <p><strong>Step 1:</strong> <a target="blank" href="https://docs.google.com/spreadsheets/d/1O2vQNxZylgppKYeBsE6Dc_7eXRiVls-bKFwzCvQThKw/edit?usp=sharing" className="download-link">Download</a> the sample Excel sheet format</p>
+        </div>
+
+        <div className="step">
+          <img src={csvIcon} alt="Excel Icon" className="step-icon" />
+          <p><strong>Step 2:</strong> Upload your Excel sheet with customer details</p>
+        </div>
+
+        <div className="step">
+        <img src={uploadIcon} alt="Excel Icon" className="step-icon" />
+          <p><strong>Step 3:</strong> Click on <span className="highlight-text">"Upload Button"</span></p>
+        </div>
+      </div>
+
+      <label htmlFor="file-upload" className="upload-label">
+        Upload a file
+        <input
+          onChange={handleFileUpload}
+          accept=".csv, .xls, .xlsx"
+          type="file"
+          id="file-upload"
+          name="file"
+          className="upload-input"
+        />
+      </label>
+      <p className="file-support-text">Supports .csv, .xls, .xlsx</p>
     </div>
-    </>
-  )
+  );
 }
-
-// Inline styles box-shadow:
-const containerStyle = {
-  boxShadow: 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px',
-  height: '250px',
-  margin: 'auto',
-  marginTop: '150px',
-  width: '35%',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column', // Centering the button vertically and horizontally
-  textAlign: 'center',
-};
-
-const labelStyle = {
-  backgroundColor: '#00ff55',
-  color: 'white',
-  padding: '10px 20px',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '16px',
-  display: 'inline-block',
-  boxShadow:'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
-};
-
-const inputStyle = {
-  display: 'none', // Hide the default file input
-};
 
 export default UploadFile;
