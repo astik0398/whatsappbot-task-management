@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import "../styles/AddEmployee.css";
 import supabase from "../supabaseClient";
 import { ToastContainer, toast } from "react-toastify";
+import EmployeeTable from "./EmployeeTable";
 
 function AddEmployee({ setShowUpload }) {
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [flag, setFlag] = useState(false)
 
   const handleSubmit = async() => {
     const { data, error } = await supabase.from("tasks").insert([
@@ -20,10 +22,14 @@ function AddEmployee({ setShowUpload }) {
         console.log("Added to Supabase:", data);
         toast.success("Employee added successfully!");
         setShowModal(false);
+        setFlag(!flag)
       }
   };
 
   return (
+    <>
+    <EmployeeTable setFlag={setFlag} flag={flag}/>
+
     <div className="container">
       <button onClick={() => setShowUpload(true)} className="button bulk-upload">
         Bulk Upload Employees
@@ -68,6 +74,7 @@ function AddEmployee({ setShowUpload }) {
       )}
       <ToastContainer/>
     </div>
+    </>
   );
 }
 

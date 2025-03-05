@@ -1,0 +1,209 @@
+import React, { useEffect, useState } from "react";
+import supabase from "../supabaseClient";
+import "../styles/Table.css"; // External CSS file
+import axios from "axios";
+import whatsapp from "../assets/whatsapp.svg";
+import editIcon from '../assets/editIcon.svg'
+import deleteIcon from '../assets/deleteIcon.svg'
+import { ToastContainer, toast } from "react-toastify";
+
+function EmployeeTable({flag, setFlag}) {
+  const [allTasks, setAllTasks] = useState([]);
+  const [headers, setHeaders] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [id, setId] = useState('')
+
+  async function getAllTasks() {
+    const { data, error } = await supabase
+      .from("tasks")
+      .select("name, id ,phone");
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(data);
+
+    if (!data || data.length === 0) {
+      alert("No data to display...");
+      return;
+    }
+
+    setAllTasks(data);
+    setHeaders(Object.keys(data[0]));
+  }
+
+  useEffect(() => {
+    getAllTasks();
+  }, [flag]);
+
+  function handleWhatsappClick(phone_number) {
+    window.open(`https://wa.me/${phone_number}`);
+  }
+
+  async function handleDelete(id){
+    const {error} = await supabase.from('tasks').delete().eq("id", id)
+   
+    if(error){
+        toast.error('Failed to delete the employee!')
+    }
+    else{
+        toast.success('Employee Deleted Successfully!')
+        setFlag(!flag)
+    }
+  }
+
+  function handleEdit(name, number, id){
+    console.log('edit btn clicked');
+    setName(name)
+    setPhoneNumber(number)
+    setId(id)
+    setShowModal(true)
+  }
+
+  async function handleUpdate(){
+    const {error} = await supabase.from('tasks').update({name: name, phone: phoneNumber}).eq('id', id)
+
+    if(error){
+        toast.error('Failed to update the details!')
+    }
+    else{
+        toast.success('Details updated successfully!')
+        setShowModal(false)
+        setFlag(!flag)
+    }
+  }
+
+  return (
+    <div>
+      {/* <div style={{maxHeight: '500px', overflowY:'auto'}}> */}
+      <table style={{width:'80%', marginTop:'0px', backgroundColor:'white'}} className="table">
+        <thead>
+          <tr>
+            <th className="table-header">NAME</th>
+            <th className="table-header">PHONE</th>
+            <th className="table-header">WHATSAPP</th>
+            <th className="table-header">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allTasks.length > 0 &&
+            allTasks.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <td className="table-cell">{row.name}</td>
+                <td className="table-cell">{row.phone}</td>
+                <td className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
+                  <img src={whatsapp} alt="WhatsApp" />
+                </td>
+                <td className="table-cell icons" style={{display:'flex', gap:'50px', justifyContent:'center'}}><span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={deleteIcon} alt="" /></span></td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      {/* </div> */}
+
+      {showModal && <div className="modal-overlay" style={{
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: '1000'
+  }}>
+  <div className="modal" style={{
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '8px',
+    width: '500px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }}>
+    <h2 style={{
+      fontSize: '18px',
+      marginBottom: '20px',
+      color: '#333'
+    }}>Update Details</h2>
+    
+    <input
+      type="text"
+      name="name"
+      placeholder="Enter Name"
+      style={{
+        padding: '10px',
+        marginBottom: '10px',
+        width: '100%',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        boxSizing: 'border-box'
+      }}
+      value={name}
+      onChange={(e)=> setName(e.target.value)}
+    />
+    
+    <input
+      type="number"
+      name="phone"
+      placeholder="Enter Phone Number"
+      style={{
+        padding: '10px',
+        marginBottom: '20px',
+        width: '100%',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
+        boxSizing: 'border-box'
+      }}
+      value={phoneNumber}
+      onChange={(e)=> setPhoneNumber(e.target.value)}
+    />
+    
+    <div className="btn-div" style={{
+      display: 'flex',
+      justifyContent: 'end',
+      width: '100%',
+      alignItems: 'center'
+    }}>
+      <button className="button-save" style={{
+        padding: '10px 20px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        width: '45%'
+      }}
+      onClick={handleUpdate}
+      >
+        Update
+      </button>
+      
+      <span
+        onClick={() => setShowModal(false)}
+        className="modal-close"
+        style={{
+          fontSize: '24px',
+          cursor: 'pointer',
+          color: '#999',
+          padding: '5px',
+          marginLeft: '10px'
+        }}
+      >
+        &times;
+      </span>
+    </div>
+  </div>
+</div>
+}
+    </div>
+  );
+}
+
+export default EmployeeTable;
