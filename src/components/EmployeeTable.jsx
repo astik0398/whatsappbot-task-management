@@ -78,7 +78,7 @@ function EmployeeTable({flag, setFlag}) {
 
   return (
     <div>
-      {/* <div style={{maxHeight: '500px', overflowY:'auto'}}> */}
+      <div style={{maxHeight: '450px', overflowY:'auto'}}>
       <table style={{width:'80%', marginTop:'0px', backgroundColor:'white'}} className="table">
         <thead>
           <tr>
@@ -102,7 +102,7 @@ function EmployeeTable({flag, setFlag}) {
             ))}
         </tbody>
       </table>
-      {/* </div> */}
+      </div>
 
       {showModal && <div className="modal-overlay" style={{
     position: 'fixed',
