@@ -14,6 +14,7 @@ function EmployeeTable({flag, setFlag}) {
   const [name, setName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [id, setId] = useState('')
+  const [searchText, setSearchText] = useState("")
 
   async function getAllTasks() {
     const { data, error } = await supabase
@@ -76,8 +77,15 @@ function EmployeeTable({flag, setFlag}) {
     }
   }
 
+  const filteredTasks = allTasks.filter(item=> item.name.toLowerCase().includes(searchText.toLowerCase()))
+
   return (
     <div>
+      
+      <div style={{display:'flex', gap:'15px', marginLeft:'120px', marginBottom:'20px'}}>
+      <input className="search-input" type="text" name="" id="" placeholder="Search Employee" onChange={(e)=> setSearchText(e.target.value)}/>
+      </div>
+
       <div style={{maxHeight: '450px', overflowY:'auto'}}>
       <table style={{width:'80%', marginTop:'0px', backgroundColor:'white'}} className="table">
         <thead>
@@ -89,15 +97,17 @@ function EmployeeTable({flag, setFlag}) {
           </tr>
         </thead>
         <tbody>
-          {allTasks.length > 0 &&
-            allTasks.map((row, rowIndex) => (
+          {filteredTasks.length > 0 &&
+            filteredTasks.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="table-cell">{row.name}</td>
                 <td className="table-cell">{row.phone}</td>
                 <td className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
                   <img src={whatsapp} alt="WhatsApp" />
                 </td>
-                <td className="table-cell icons" style={{display:'flex', gap:'50px', justifyContent:'center'}}><span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={deleteIcon} alt="" /></span></td>
+                <td className="table-cell icons" ><div style={{display:'flex', justifyContent:'center', gap:'50px'}}>
+                  
+                <span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={deleteIcon} alt="" /></span></div></td>
               </tr>
             ))}
         </tbody>
