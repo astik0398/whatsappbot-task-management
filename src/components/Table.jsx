@@ -46,8 +46,8 @@ function Table() {
     console.log('id, status, task_done, reminder_frequency',id, status, task_done, extracted_frequency);
 
 
-    if (task_done === "Yes") {
-      toast.error('The task is already marked as complete!')
+    if (task_done === "Completed") {
+      alert('The task is already marked as complete!')
       return;
     }
 
@@ -94,7 +94,7 @@ function Table() {
                 <td className="table-cell">{row.name}</td>
                 {/* <td className="table-cell">{row.phone}</td> */}
                 <td className="table-cell">{row.tasks}</td>
-                <td className="table-cell"><span style={{backgroundColor:`${row.task_done === 'Pending' ? 'orange' : row.task_done === 'Not Completed' ? 'red' : 'green'}`, padding:'5px', borderRadius:'5px', color:'white'}} >{row.task_done}</span></td>
+                <td className="table-cell"><span style={{backgroundColor:`${row.task_done === 'Pending' ? 'orange' : row.task_done === 'Not Completed' ? 'red' : row.task_done === 'Completed' ? 'green' :''}`, padding:'5px', borderRadius:'5px', color:'white'}} >{row.task_done}</span></td>
                 <td className="table-cell">{row.reason}</td>
                 <td className="table-cell">
                   {row.due_date &&
