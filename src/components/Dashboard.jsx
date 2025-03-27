@@ -69,7 +69,7 @@ const Dashboard = () => {
             }}
           >
             <img width={"20px"} src={entriesIcon} alt="" />
-            <p>All Task</p>
+            <p>All Tasks</p>
           </li>
         </ul>
       </div>
