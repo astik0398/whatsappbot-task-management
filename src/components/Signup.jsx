@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs'; // Install this package
 import { toast, ToastContainer } from 'react-toastify';
 import '../styles/Signup.css'
@@ -11,6 +11,7 @@ function Signup() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
 
   async function handleSignup(e) {
     e.preventDefault();
@@ -43,12 +44,14 @@ function Signup() {
       console.error(error);
     } else {
       toast.success('Signup successful!');
+      // navigate('/login')
     }
   }
 
   return (
     <div style={{display:'flex'}}>
         <div style={{backgroundColor:'#1e293b', height:'100vh', width:'40%', color:'white', display:'flex', flexDirection:'column', justifyContent:'center'}}>
+            <h1 style={{color:'#f39c12'}}>REGISTER NOW!</h1>
             <h1 style={{marginTop:'0px', fontSize:'35px', letterSpacing:'4px'}}>TASK MANAGEMENT</h1>
             <p style={{marginTop:'0px', fontSize:'20px', letterSpacing:'2px'}}>Manage all your tasks at one place!</p>
         </div>

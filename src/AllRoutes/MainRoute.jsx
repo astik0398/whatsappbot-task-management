@@ -4,6 +4,7 @@ import UploadFile from '../components/UploadFile'
 import Table from '../components/Table'
 import Dashboard from '../components/Dashboard'
 import Signup from '../components/Signup'
+import Login from '../components/Login'
 
 function MainRoute() {
   return (
@@ -11,7 +12,7 @@ function MainRoute() {
         <Routes>
             <Route path='/upload' element={<UploadFile/>}/>
             {/* <Route path='/entries' element={<Table/>}/> */}
-
+            <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Signup/>}/>
             <Route path='/' element={<Dashboard/>}/>
         </Routes>
