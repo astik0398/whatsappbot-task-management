@@ -15,11 +15,25 @@ function EmployeeTable({flag, setFlag}) {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [id, setId] = useState('')
   const [searchText, setSearchText] = useState("")
+  const [userId, setUserId] = useState('')
+
+  useEffect(()=> {
+        const user_id = localStorage.getItem('user_id')
+        console.log('EMPLOYEE TABLE user_id',user_id);
+        
+        setUserId(user_id)
+      }, [])
+
+      useEffect(() => {
+        if (userId) {  // Ensure userId is set before fetching
+          getAllTasks();
+        }
+      }, [userId, flag]);
 
   async function getAllTasks() {
     const { data, error } = await supabase
       .from("tasks")
-      .select("name, id ,phone");
+      .select("name, id ,phone").eq('userId', userId)
 
     if (error) {
       throw error;
@@ -35,10 +49,6 @@ function EmployeeTable({flag, setFlag}) {
     setAllTasks(data);
     setHeaders(Object.keys(data[0]));
   }
-
-  useEffect(() => {
-    getAllTasks();
-  }, [flag]);
 
   function handleWhatsappClick(phone_number) {
     window.open(`https://wa.me/${phone_number}`);

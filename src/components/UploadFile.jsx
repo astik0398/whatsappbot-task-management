@@ -11,6 +11,14 @@ import uploadIcon from '../assets/uploadIcon.svg'
 function UploadFile({setIsUploaded}) {
   const [allData, setAllData] = useState([]);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null)
+
+   useEffect(()=> {
+      const user_id = localStorage.getItem('user_id')
+      console.log(user_id);
+      
+      setUserId(user_id)
+    }, [])
 
   function handleFileUpload(e) {
     const file = e.target.files[0];
@@ -64,7 +72,12 @@ function UploadFile({setIsUploaded}) {
       return;
     }
 
-    const { data, error } = await supabase.from("tasks").insert(dataArray);
+    const tasksWithUserId = dataArray.map(task=> ({
+      ...task,
+      userId: userId
+    }))
+
+    const { data, error } = await supabase.from("tasks").insert(tasksWithUserId);
 
     if (error) {
       console.error("Error inserting tasks:", error);

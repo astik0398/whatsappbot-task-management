@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/AddEmployee.css";
 import supabase from "../supabaseClient";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,11 +9,19 @@ function AddEmployee({ setShowUpload }) {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [flag, setFlag] = useState(false)
+  const [userId, setUserId] = useState(null)
+
+     useEffect(()=> {
+        const user_id = localStorage.getItem('user_id')
+        console.log(user_id);
+        
+        setUserId(user_id)
+      }, [])
 
   const handleSubmit = async() => {
     const { data, error } = await supabase.from("tasks").insert([
-        { name: name, phone: phoneNumber }
-      ]);
+        { name: name, phone: phoneNumber,  userId: userId}
+      ])
     
       if (error) {
         console.error("Error inserting data:", error.message);

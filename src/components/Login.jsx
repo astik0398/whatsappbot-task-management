@@ -4,12 +4,17 @@ import bcrypt from 'bcryptjs';
 import { toast, ToastContainer } from 'react-toastify';
 import '../styles/Login.css'
 import supabase from '../supabaseClient';
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
+    const [showPassword, setShowPassword] = useState(false);
+  
+    const handleTogglePassword = () => {
+      setShowPassword((prev) => !prev);
+    };
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -37,7 +42,10 @@ function Login() {
     localStorage.setItem('user_id', data.id);
     localStorage.setItem('name', data.name)
     window.dispatchEvent(new Event("userLoggedIn"));
-    navigate('/')
+
+    setTimeout(() => {
+      navigate('/')
+    }, 2000);
   }
 
   return (
@@ -53,13 +61,30 @@ function Login() {
         <label>Email</label>
         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Enter your email'/>
       </div>
-      <div>
+      <div style={{ position: "relative" }}>
         <label>Password</label>
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder='Enter your password'/>
+        <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} placeholder='Enter your password'/>
+        <span
+                  onClick={handleTogglePassword}
+                  style={{
+                    position: "absolute",
+                    right: "20px",
+                    top: "60%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {showPassword ? <FaEyeSlash color='grey'/> : <FaEye color='grey'/>}
+                </span>
       </div>
+     <div style={{display:'flex', flexDirection:'row-reverse', justifyContent:'space-between'}}>
+     <label>
+  <Link className="forgot-password-label" target='blank' to="/forgot-password">Forgot Password?</Link>
+</label>
       <label>
         Are you a new user? <Link className="newuser-label" to="/register">Signup</Link>
       </label>
+     </div>
       <button type="submit">Login</button>
       <ToastContainer />
     </form>

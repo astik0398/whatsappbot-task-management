@@ -9,11 +9,27 @@ function Table() {
   const [allTasks, setAllTasks] = useState([]);
   const [headers, setHeaders] = useState([]);
   const [status, setStatus] = useState(false);
+  const [userId, setUserId] = useState(null)
+  
+  useEffect(()=> {
+        const user_id = Number(localStorage.getItem('user_id'))
+        console.log(typeof user_id);
+        
+        setUserId(user_id)
+      }, [])
+
+      useEffect(() => {
+              if (userId) { 
+                getAllTasks();
+              }
+            }, [userId]);
 
   async function getAllTasks() {
+    console.log(typeof userId);
+
     const { data, error } = await supabase
       .from("tasks")
-      .select("name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason");
+      .select("name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason").eq('userId', userId)
 
     if (error) {
       throw error;
@@ -29,10 +45,6 @@ function Table() {
     setAllTasks(data);
     setHeaders(Object.keys(data[0]));
   }
-
-  useEffect(() => {
-    getAllTasks();
-  }, []);
 
   function handleWhatsappClick(phone_number) {
     window.open(`https://wa.me/${phone_number}`);
