@@ -12,7 +12,7 @@ function Table() {
   const [userId, setUserId] = useState(null)
   
   useEffect(()=> {
-        const user_id = Number(localStorage.getItem('user_id'))
+        const user_id = (localStorage.getItem('user_id'))
         console.log(typeof user_id);
         
         setUserId(user_id)

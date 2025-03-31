@@ -6,6 +6,7 @@ import Dashboard from '../components/Dashboard'
 import Signup from '../components/Signup'
 import Login from '../components/Login'
 import ForgotPassword from '../components/ForgotPassword'
+import ResetPassword from '../components/ResetPassword'
 
 function MainRoute() {
   return (
@@ -19,6 +20,7 @@ function MainRoute() {
 
             <Route path="/forgot-password" element={<ForgotPassword />} />
 
+            <Route path='/reset-password' element={<ResetPassword/>}/>
         </Routes>
     </div>
   )

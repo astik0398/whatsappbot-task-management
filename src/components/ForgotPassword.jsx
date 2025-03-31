@@ -16,7 +16,11 @@ function ForgotPassword() {
       return;
     }
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    const redirectUrl = `${window.location.origin}/reset-password`;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl, 
+    })
 
     if (error) {
       toast.error('Error sending reset email. Please try again later!');
@@ -31,11 +35,15 @@ function ForgotPassword() {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
+    <div style={{display:'flex', gap:'240px'}}>
+      <div className='left-div' >
+        <h1>TASK MANAGEMENT</h1>
+      </div>
+
+      <div style={{display:'flex', height:'fit-content', marginTop:'250px'}}>
       <form onSubmit={handleForgotPassword} className="forgot-password-form">
-        <h2>Forgot Password?</h2>
+        <h3 style={{textAlign:'left'}}>Forgot Password?</h3>
         <div>
-          <label>Email</label>
           <input
             type="email"
             placeholder="Enter your email"
@@ -44,8 +52,10 @@ function ForgotPassword() {
           />
         </div>
         <button type="submit">Send Reset Link</button>
-        <ToastContainer />
       </form>
+    </div>
+    <ToastContainer />
+
     </div>
   );
 }

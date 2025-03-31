@@ -30,39 +30,28 @@ function Signup() {
       toast.error('Password must be at least 6 characters long!');
       return;
     }
-
-    console.log('pass===>', password);
-
-    const { data: existingUser, error: checkError } = await supabase
-    .from('users')
-    .select('email')
-    .eq('email', email)
-    .single();
-
-    if (checkError && checkError.code !== 'PGRST116') {
-      toast.error('Error checking email availability');
-      console.error(checkError);
-      return;
-    }
   
-    if (existingUser) {
-      toast.error('Email is already in use!');
-      return;
-    }
     
-    const hashedPassword = bcrypt.hashSync(password, 10);
 
-    console.log('hashedPassword===>', hashedPassword);
 
-    const { error } = await supabase.from('users').insert({
-      name: `${firstName} ${lastName}`,
+    const { user, error } = await supabase.auth.signUp({
       email,
-      password: hashedPassword,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName
+        }
+      }
     });
 
+    console.log(user);
+    
+
     if (error) {
-      toast.error('Signup failed!');
+      toast.error(error.message);
       console.error(error);
+      return
     } else {
       toast.success('Signup successful!');
 
@@ -114,8 +103,9 @@ function Signup() {
         Already have an account? <Link className="newuser-label" to="/login">Login</Link>
       </label>
       <button type="submit">Sign Up</button>
-      <ToastContainer />
     </form>
+    <ToastContainer />
+
     </div>
   );
 }

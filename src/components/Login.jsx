@@ -24,23 +24,21 @@ function Login() {
       return;
     }
 
-    const { data, error } = await supabase.from('users').select('id, password, name').eq('email', email).single();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    console.log('user-data',data);
 
     if (error || !data) {
       toast.error('Invalid Credentials!');
       return;
-    }
-    
-    const passwordMatch = bcrypt.compareSync(password, data.password);
-
-    if (!passwordMatch) {
-      toast.error('Invalid Credentials!');
-      return;
-    }
+    }    
 
     toast.success('Login successful!');
-    localStorage.setItem('user_id', data.id);
-    localStorage.setItem('name', data.name)
+    localStorage.setItem('user_id', data.user.id);
+    localStorage.setItem('name', `${data.user.user_metadata.first_name} ${data.user.user_metadata.last_name}`)
     window.dispatchEvent(new Event("userLoggedIn"));
 
     setTimeout(() => {
@@ -86,9 +84,9 @@ function Login() {
       </label>
      </div>
       <button type="submit">Login</button>
-      <ToastContainer />
     </form>
         </div>
+        <ToastContainer />
     </div>
   );
 }
