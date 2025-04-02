@@ -225,7 +225,7 @@ function EmployeeTable({flag, setFlag}) {
 </div>
 }
 
-    </div> : <img src={noemployee} width={'65%'}/>}
+    </div> : <img src={noemployee} width={'60%'}/>}
 
     <ToastContainer/>
 

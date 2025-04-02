@@ -86,7 +86,7 @@ function Table() {
   }
 
   return (
-    <div style={{height:'700px', overflowY:'auto', marginTop:'-40px'}}>
+    <div style={{height:'650px', overflowY:'auto', marginTop:'-40px'}}>
       {allTasks.length > 0 ? <table className="table">
         <thead>
           <tr>
