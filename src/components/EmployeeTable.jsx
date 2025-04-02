@@ -6,6 +6,7 @@ import whatsapp from "../assets/whatsapp.svg";
 import editIcon from '../assets/editIcon.svg'
 import deleteIcon from '../assets/deleteIcon.svg'
 import { ToastContainer, toast } from "react-toastify";
+import noemployee from '../assets/noemployee.png'
 
 function EmployeeTable({flag, setFlag}) {
   const [allTasks, setAllTasks] = useState([]);
@@ -42,7 +43,7 @@ function EmployeeTable({flag, setFlag}) {
     console.log(data);
 
     if (!data || data.length === 0) {
-      alert("No data to display...");
+      toast.error('No data to display...')
       return;
     }
 
@@ -90,7 +91,8 @@ function EmployeeTable({flag, setFlag}) {
   const filteredTasks = allTasks.filter(item=> item.name.toLowerCase().includes(searchText.toLowerCase()))
 
   return (
-    <div>
+    <>
+    {filteredTasks.length > 0 ? <div>
       
       <div style={{display:'flex', gap:'15px', marginLeft:'120px', marginBottom:'20px'}}>
       <input className="search-input" type="text" name="" id="" placeholder="Search Employee" onChange={(e)=> setSearchText(e.target.value)}/>
@@ -222,7 +224,12 @@ function EmployeeTable({flag, setFlag}) {
   </div>
 </div>
 }
-    </div>
+
+    </div> : <img src={noemployee} width={'65%'}/>}
+
+    <ToastContainer/>
+
+    </>
   );
 }
 

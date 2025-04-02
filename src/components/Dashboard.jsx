@@ -6,6 +6,8 @@ import employeesIcon from "../assets/employees.svg";
 import entriesIcon from "../assets/entry.svg";
 import AddEmployee from "./AddEmployee";
 import { useNavigate } from "react-router-dom";
+import settings from '../assets/settings.svg'
+import Settings from "./Settings";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("Employees");
@@ -71,6 +73,16 @@ const Dashboard = () => {
             <img width={"20px"} src={entriesIcon} alt="" />
             <p>All Tasks</p>
           </li>
+          <li
+            className={activeSection === "Settings" ? "active" : ""}
+            onClick={() => {
+              setActiveSection("Settings");
+              setShowUpload(false);
+            }}
+          >
+            <img width={"20px"} src={settings} alt="" />
+            <p>Settings</p>
+          </li>
         </ul>
       </div>
 
@@ -107,6 +119,11 @@ const Dashboard = () => {
         {activeSection === "Entries" && (
           <div>
             <Table />
+          </div>
+        )}
+        {activeSection === "Settings" && (
+          <div>
+            <Settings />
           </div>
         )}
       </div>

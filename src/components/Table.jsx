@@ -3,7 +3,8 @@ import supabase from "../supabaseClient";
 import "../styles/Table.css"; // External CSS file
 import axios from "axios";
 import whatsapp from "../assets/whatsapp.svg";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import noentriestransparent from '../assets/noentry.png'
 
 function Table() {
   const [allTasks, setAllTasks] = useState([]);
@@ -38,7 +39,7 @@ function Table() {
     console.log(data);
 
     if (!data || data.length === 0) {
-      alert("No data to display...");
+      toast.error('No data to display...')
       return;
     }
 
@@ -86,7 +87,7 @@ function Table() {
 
   return (
     <div style={{height:'700px', overflowY:'auto', marginTop:'-40px'}}>
-      <table className="table">
+      {allTasks.length > 0 ? <table className="table">
         <thead>
           <tr>
             <th className="table-header">NAME</th>
@@ -143,7 +144,8 @@ function Table() {
               </tr>
             ))}
         </tbody>
-      </table>
+      </table> : <img style={{marginTop:'15vh'}} width={'70%'} src={noentriestransparent}/>}
+      <ToastContainer/>
     </div>
   );
 }
