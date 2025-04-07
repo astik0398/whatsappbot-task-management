@@ -31,8 +31,21 @@ function AddEmployee({ setShowUpload }) {
         toast.success("Employee added successfully!");
         setShowModal(false);
         setFlag(!flag)
+        await refreshTasks()
       }
   };
+
+  async function refreshTasks() {
+    try {
+      const response = await fetch(
+        "https://whatsappbot-task-management-be-production.up.railway.app/refresh"
+      );
+      const result = await response.json();
+      console.log("Tasks refreshed:", result);
+    } catch (error) {
+      console.error("Error refreshing tasks:", error);
+    }
+  }
 
   return (
     <>
