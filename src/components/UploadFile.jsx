@@ -21,6 +21,9 @@ function UploadFile({setIsUploaded}) {
     }, [])
 
   function handleFileUpload(e) {
+
+    console.log('inside handleFileUpload...');
+    
     const file = e.target.files[0];
 
     if (!file) {
@@ -56,7 +59,7 @@ function UploadFile({setIsUploaded}) {
         return obj;
       });
 
-      console.log(formattedData);
+      console.log('formattedData',formattedData);
 
       setAllData(formattedData);
 
@@ -77,14 +80,32 @@ function UploadFile({setIsUploaded}) {
       userId: userId
     }))
 
-    const { data, error } = await supabase.from("tasks").insert(tasksWithUserId);
+    for (let task of tasksWithUserId) {
+      const { name, phone } = task; 
+  
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("id") 
+        .eq("name", name)
+        .eq("phone", phone)  
+        .single(); 
+  
+      if (data) {
+        console.log(`Skipping task with name: ${name}, phone number: ${phone} because it already exists.`);
+        continue;
+      }
+  
+      const { data: insertData, error: insertError } = await supabase
+        .from("tasks")
+        .insert([task]);
+  
+      if (insertError) {
+        console.error("Error inserting task:", insertError);
+      } else {
+        console.log("Inserted task:", insertData);
+      }
+    }  
 
-    if (error) {
-      console.error("Error inserting tasks:", error);
-      throw error;
-    }
-
-    console.log("Inserted tasks:", data);
     await refreshTasks();
 
     // navigate("/entries");
