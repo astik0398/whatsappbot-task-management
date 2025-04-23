@@ -86,12 +86,11 @@ function UploadFile({setIsUploaded}) {
       const { data, error } = await supabase
         .from("tasks")
         .select("id") 
-        .eq("name", name)
         .eq("phone", phone)  
         .single(); 
   
       if (data) {
-        console.log(`Skipping task with name: ${name}, phone number: ${phone} because it already exists.`);
+        console.log(`Skipping task with phone number: ${phone} because it already exists.`);
         continue;
       }
   
@@ -109,7 +108,8 @@ function UploadFile({setIsUploaded}) {
     await refreshTasks();
 
     // navigate("/entries");
-    setIsUploaded(true)
+    // setIsUploaded(true)
+    window.location.reload()
   }
 
   async function refreshTasks() {

@@ -3,6 +3,8 @@ import "../styles/AddEmployee.css";
 import supabase from "../supabaseClient";
 import { ToastContainer, toast } from "react-toastify";
 import EmployeeTable from "./EmployeeTable";
+import 'react-phone-input-2/lib/style.css';  // Required for flags
+import PhoneInput from "react-phone-input-2";
 
 function AddEmployee({ setShowUpload }) {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +21,25 @@ function AddEmployee({ setShowUpload }) {
       }, [])
 
   const handleSubmit = async() => {
+
+    const { data: existingUser, error: fetchError } = await supabase
+    .from("tasks")
+    .select("id")
+    .eq("phone", phoneNumber)
+    .maybeSingle(); 
+
+  if (fetchError) {
+    console.error("Error checking phone number:", fetchError.message);
+    toast.error("Failed to check phone number!");
+    return;
+  }
+
+  if (existingUser) {
+
+    toast.error("Phone number already exists in the database!");
+    return;
+  }
+  
     const { data, error } = await supabase.from("tasks").insert([
         { name: name, phone: phoneNumber,  userId: userId}
       ])
@@ -30,6 +51,8 @@ function AddEmployee({ setShowUpload }) {
         console.log("Added to Supabase:", data);
         toast.success("Employee added successfully!");
         setShowModal(false);
+        setName("");  // Reset name
+    setPhoneNumber("");  // Reset phone number
         setFlag(!flag)
         await refreshTasks()
       }
@@ -72,13 +95,11 @@ function AddEmployee({ setShowUpload }) {
               value={name}
               onChange={(e)=> setName(e.target.value)}
             />
-            <input
-              type="number"
-              name="phone"
-              placeholder="Enter Phone Number"
-              value={phoneNumber}
-              onChange={(e)=> setPhoneNumber(e.target.value)}
-            />
+       <PhoneInput
+        country="in"  // Default country
+        value={phoneNumber}
+        onChange={(e)=> setPhoneNumber(e)}
+      />
             <div className="btn-div">
             <button onClick={handleSubmit} className="button-save">
               Save
@@ -93,8 +114,8 @@ function AddEmployee({ setShowUpload }) {
           </div>
         </div>
       )}
-      <ToastContainer/>
     </div>
+    <ToastContainer/>
     </>
   );
 }
