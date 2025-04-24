@@ -30,7 +30,7 @@ function Table() {
 
     const { data, error } = await supabase
       .from("tasks")
-      .select("name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason").eq('userId', userId)
+      .select("name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason").eq('userId', userId).order("id", { ascending: true })
 
     if (error) {
       throw error;

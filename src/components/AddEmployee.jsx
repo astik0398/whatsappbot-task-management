@@ -48,7 +48,6 @@ function AddEmployee({ setShowUpload }) {
         console.error("Error inserting data:", error.message);
         toast.error("Failed to add employee!");
       } else {
-        console.log("Added to Supabase:", data);
         toast.success("Employee added successfully!");
         setShowModal(false);
         setName("");  // Reset name
