@@ -93,10 +93,11 @@ function Table() {
             <th className="table-header">NAME</th>
             {/* <th className="table-header">PHONE</th> */}
             <th className="table-header">TASKS</th>
-            <th className="table-header">STATUS</th>
+            <th style={{width:'120px'}} className="table-header">STATUS</th>
             <th className="table-header">REASON</th>
             <th className="table-header">TIMELINE</th>
             <th className="table-header">SEND REMINDER</th>
+            <th className="table-header">FREQUENCY</th>
             <th className="table-header">WHATSAPP</th>
           </tr>
         </thead>
@@ -137,6 +138,9 @@ function Table() {
                     />
                     <span className="slider"></span>
                   </label>
+                </td>
+                <td className="table-cell">
+                  {row.reminder_frequency}
                 </td>
                 <td className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
                   <img src={whatsapp} alt="WhatsApp" />
