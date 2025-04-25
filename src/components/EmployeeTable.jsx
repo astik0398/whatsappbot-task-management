@@ -63,7 +63,7 @@ function EmployeeTable({flag, setFlag}) {
     }
     else{
         toast.success('Employee Deleted Successfully!')
-        // await refreshTasks()
+        await refreshTasks()
         setFlag(!flag)
     }
   }
@@ -85,6 +85,7 @@ function EmployeeTable({flag, setFlag}) {
     else{
         toast.success('Details updated successfully!')
         setShowModal(false)
+        await refreshTasks()
         setFlag(!flag)
     }
   }
