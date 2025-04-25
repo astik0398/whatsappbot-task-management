@@ -63,7 +63,7 @@ function EmployeeTable({flag, setFlag}) {
     }
     else{
         toast.success('Employee Deleted Successfully!')
-        await refreshTasks()
+        // await refreshTasks()
         setFlag(!flag)
     }
   }
