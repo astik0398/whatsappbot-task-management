@@ -97,7 +97,7 @@ function Table() {
             <th className="table-header">REASON</th>
             <th className="table-header">TIMELINE</th>
             <th className="table-header">SEND REMINDER</th>
-            <th className="table-header">FREQUENCY</th>
+            <th className="table-header">REMINDER FREQUENCY</th>
             <th className="table-header">WHATSAPP</th>
           </tr>
         </thead>

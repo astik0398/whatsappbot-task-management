@@ -63,6 +63,7 @@ function EmployeeTable({flag, setFlag}) {
     }
     else{
         toast.success('Employee Deleted Successfully!')
+        await refreshTasks()
         setFlag(!flag)
     }
   }
@@ -89,6 +90,18 @@ function EmployeeTable({flag, setFlag}) {
   }
 
   const filteredTasks = allTasks.filter(item=> item.name.toLowerCase().includes(searchText.toLowerCase()))
+
+  async function refreshTasks() {
+    try {
+      const response = await fetch(
+        "https://whatsappbot-task-management-be-production.up.railway.app/refresh"
+      );
+      const result = await response.json();
+      console.log("Tasks refreshed:", result);
+    } catch (error) {
+      console.error("Error refreshing tasks:", error);
+    }
+  }
 
   return (
     <>
