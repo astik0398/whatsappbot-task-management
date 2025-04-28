@@ -54,7 +54,15 @@ function UploadFile({setIsUploaded}) {
       const formattedData = jsonData.slice(1).map((row) => {
         let obj = {};
         headers.forEach((header, index) => {
-          obj[header] = row[index] || ""; // if there's no value, set it as an empty string
+
+          let value = row[index] || ""; // if there's no value, set it as an empty string
+
+          if (header.toLowerCase() === 'name' && typeof value === 'string') {
+            value = value.trim(); // Trim leading and trailing spaces
+          }
+
+        obj[header] = value;
+
         });
         return obj;
       });

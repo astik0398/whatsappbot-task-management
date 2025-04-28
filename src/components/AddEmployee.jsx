@@ -41,7 +41,7 @@ function AddEmployee({ setShowUpload }) {
   }
   
     const { data, error } = await supabase.from("tasks").insert([
-        { name: name, phone: phoneNumber,  userId: userId}
+        { name: name.trim(), phone: phoneNumber,  userId: userId}
       ])
     
       if (error) {
