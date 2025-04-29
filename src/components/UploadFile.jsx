@@ -12,12 +12,15 @@ function UploadFile({setIsUploaded}) {
   const [allData, setAllData] = useState([]);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null)
+  const [employerNumber, setEmployerNumber] = useState(null)
 
    useEffect(()=> {
       const user_id = localStorage.getItem('user_id')
-      console.log(user_id);
+      const employer_number = localStorage.getItem('employer_number')
+      console.log(`whatsapp:+${employerNumber}`);
       
       setUserId(user_id)
+      setEmployerNumber(employer_number)
     }, [])
 
   function handleFileUpload(e) {
@@ -85,7 +88,8 @@ function UploadFile({setIsUploaded}) {
 
     const tasksWithUserId = dataArray.map(task=> ({
       ...task,
-      userId: userId
+      userId: userId,
+      employerNumber: `whatsapp:+${employerNumber}`
     }))
 
     for (let task of tasksWithUserId) {

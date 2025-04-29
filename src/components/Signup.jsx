@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import '../styles/Signup.css'
 import supabase from '../supabaseClient';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import PhoneInput from 'react-phone-input-2';
 
 function Signup() {
   const [firstName, setFirstName] = useState('');
@@ -13,6 +14,7 @@ function Signup() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -34,18 +36,20 @@ function Signup() {
     
 
 
-    const { user, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           first_name: firstName,
-          last_name: lastName
+          last_name: lastName,
+          phone: phoneNumber // stored in user_metadata
         }
       }
     });
-
-    console.log(user);
+    
+    const user = data?.user;
+    console.log(user);    
     
 
     if (error) {
@@ -79,6 +83,16 @@ function Signup() {
           <input value={lastName} onChange={(e) => setLastName(e.target.value.trim())} type="text" placeholder='Your last name'/>
         </div>
       </div>
+
+      <div style={{marginBottom:'20px'}}>
+      <label>Whatsapp Number</label>
+      <PhoneInput
+        country="in"  // Default country
+        value={phoneNumber}
+        onChange={(e)=> setPhoneNumber(e)}
+      />
+      </div>
+
       <div>
         <label>Email</label>
         <input value={email} onChange={(e) => setEmail(e.target.value.trim())} type="email" placeholder='Your email goes here'/>

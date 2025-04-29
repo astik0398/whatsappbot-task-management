@@ -39,6 +39,7 @@ function Login() {
     toast.success('Login successful!');
     localStorage.setItem('user_id', data.user.id);
     localStorage.setItem('name', `${data.user.user_metadata.first_name} ${data.user.user_metadata.last_name}`)
+    localStorage.setItem('employer_number', data.user.user_metadata.phone)
     window.dispatchEvent(new Event("userLoggedIn"));
 
     setTimeout(() => {
