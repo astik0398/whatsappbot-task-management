@@ -12,12 +12,20 @@ function AddEmployee({ setShowUpload }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [flag, setFlag] = useState(false)
   const [userId, setUserId] = useState(null)
+  const [employerNumber, setEmployerNumber] = useState(null)
+  
 
      useEffect(()=> {
         const user_id = localStorage.getItem('user_id')
+        const employer_number = localStorage.getItem('employer_number')
+
         console.log(user_id);
         
         setUserId(user_id)
+        setEmployerNumber(employer_number)
+
+        console.log(`whatsapp:+${employer_number}`);
+
       }, [])
 
   const handleSubmit = async() => {
@@ -41,7 +49,7 @@ function AddEmployee({ setShowUpload }) {
   }
   
     const { data, error } = await supabase.from("tasks").insert([
-        { name: name.trim(), phone: phoneNumber,  userId: userId}
+        { name: name.trim(), phone: phoneNumber,  userId: userId, employerNumber: `whatsapp:+${employerNumber}`}
       ])
     
       if (error) {
