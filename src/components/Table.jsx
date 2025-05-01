@@ -80,7 +80,7 @@ function Table() {
 
     if (status) {
       axios.post(
-        "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder", {reminder_frequency: reminder_frequency}
+        "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder", {reminder_frequency: reminder_frequency, taskId: id}
       );
     }
   }
