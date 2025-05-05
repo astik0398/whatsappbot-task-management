@@ -60,7 +60,7 @@ function Table() {
 
 
     if (task_done === "Completed") {
-      alert('The task is already marked as complete!')
+      toast.error('The task is already marked as complete!')
       return;
     }
 
@@ -149,7 +149,7 @@ function Table() {
             ))}
         </tbody>
       </table> : <img style={{marginTop:'15vh'}} width={'70%'} src={noentriestransparent}/>}
-      <ToastContainer/>
+      <ToastContainer position="bottom-center" theme="colored"/>
     </div>
   );
 }
