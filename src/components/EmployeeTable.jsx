@@ -7,6 +7,9 @@ import editIcon from '../assets/editIcon.svg'
 import deleteIcon from '../assets/deleteIcon.svg'
 import { ToastContainer, toast } from "react-toastify";
 import noemployee from '../assets/noemployee.png'
+import whatsapplight from '../assets/whatsapplight.svg'
+import editlight from '../assets/editlight.svg'
+import deletelight from '../assets/deletelight.svg'
 
 function EmployeeTable({flag, setFlag}) {
   const [allTasks, setAllTasks] = useState([]);
@@ -17,6 +20,7 @@ function EmployeeTable({flag, setFlag}) {
   const [id, setId] = useState('')
   const [searchText, setSearchText] = useState("")
   const [userId, setUserId] = useState('')
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(()=> {
         const user_id = localStorage.getItem('user_id')
@@ -104,6 +108,24 @@ function EmployeeTable({flag, setFlag}) {
     }
   }
 
+  useEffect(() => {
+    const updateTheme = () => {
+      const storedTheme = localStorage.getItem("theme");
+      setIsDarkMode(storedTheme === "dark");
+    };
+  
+    // Run initially
+    updateTheme();
+  
+    // Listen for changes to localStorage
+    window.addEventListener("storage", updateTheme);
+  
+    return () => {
+      window.removeEventListener("storage", updateTheme);
+    };
+  }, []);  
+  
+
   return (
     <>
     {filteredTasks.length > 0 ? <div>
@@ -113,7 +135,7 @@ function EmployeeTable({flag, setFlag}) {
       </div>
 
       <div style={{maxHeight: '450px', overflowY:'auto'}}>
-      <table style={{width:'80%', marginTop:'0px', backgroundColor:'white'}} className="table">
+      <table style={{width:'80%', marginTop:'0px'}} className="table">
         <thead>
           <tr>
             <th className="table-header">NAME</th>
@@ -129,11 +151,11 @@ function EmployeeTable({flag, setFlag}) {
                 <td className="table-cell">{row.name}</td>
                 <td className="table-cell">{row.phone}</td>
                 <td className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
-                  <img src={whatsapp} alt="WhatsApp" />
+                  <img src={isDarkMode ? whatsapplight : whatsapp} alt="WhatsApp" />
                 </td>
                 <td className="table-cell icons" ><div style={{display:'flex', justifyContent:'center', gap:'50px'}}>
                   
-                <span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={deleteIcon} alt="" /></span></div></td>
+                <span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={isDarkMode? editlight :editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={isDarkMode ? deletelight: deleteIcon} alt="" /></span></div></td>
               </tr>
             ))}
         </tbody>

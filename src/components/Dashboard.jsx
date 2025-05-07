@@ -8,11 +8,13 @@ import AddEmployee from "./AddEmployee";
 import { useNavigate } from "react-router-dom";
 import settings from '../assets/settings.svg'
 import Settings from "./Settings";
+import { FaSun, FaMoon } from "react-icons/fa"; // at the top of your file
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("Employees");
   const [showUpload, setShowUpload] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false)
+  const [theme, setTheme] = useState('light'); // 'light' or 'dark'
   const [name, setName] = useState('')
   const navigate = useNavigate()
   
@@ -46,6 +48,21 @@ const Dashboard = () => {
     localStorage.clear()
     navigate('/login')
   }
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) setTheme(savedTheme);
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    window.dispatchEvent(new Event("storage")); // <== manually trigger
+      }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+  
 
   return (
     <div className="dashboard">
@@ -86,14 +103,20 @@ const Dashboard = () => {
         </ul>
       </div>
 
-      <div className="content">
+      <div className={`content ${theme}`}>
         <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
           <div style={{margin:'-12px 0px', display:'flex', justifyContent:'end', alignItems:'center', gap:'10px'}}>
           <h3>Hello! {getFirstName(name)}</h3>
           <span style={{backgroundColor:'#1e293b', color:'white', padding:'8px', borderRadius:'50%', width:'20px', height:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>{getNameInitials(name)}</span>
           </div>
 
-          <div><button className="logout-btn" onClick={handleLogout} style={{
+          <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'50px'}}>
+          <div onClick={toggleTheme} className="theme-toggle" style={{ cursor: 'pointer', fontSize: '24px', display:'flex' }}>
+  {theme === 'light' ? <FaMoon /> : <FaSun color="yellow" />}
+</div>
+
+
+            <button className="logout-btn" onClick={handleLogout} style={{
   color: 'white',              
   padding: '8px 20px',
   border: 'none',        

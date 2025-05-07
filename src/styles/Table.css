@@ -157,3 +157,80 @@
   background-color:#007bff;
   color: white;
 }
+
+.tab-buttons {
+  display: flex;
+  margin: auto;
+  border: 1px solid #ccc;
+  width: fit-content;
+  padding: 2px;
+  border-radius: 5px;
+  gap: 0px;
+}
+
+.tab-buttons button {
+  padding: 10px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+  border: none;
+  color: black;
+}
+
+#btn-all{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+#btn-pending{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-left: 0;
+}
+
+#btn-incomplete{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-left: 0;
+
+}
+
+#btn-completed{
+
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.tab-buttons button:last-child {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.tab-buttons button:first-child {
+  margin-left: 0;
+}
+
+/* Highlight the active tab */
+.tab-buttons .active {
+  background-color: #007BFF;
+  color: white;
+  border-color: #007BFF;
+}
+
+.tab-buttons button:hover {
+  background-color: #007BFF;
+  color: white;
+}

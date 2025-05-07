@@ -7,12 +7,16 @@ import "../styles/UploadFile.css"; // Import external CSS
 import downloadIcon from '../assets/downloadIcon.svg'
 import csvIcon from '../assets/csvIcon.svg'
 import uploadIcon from '../assets/uploadIcon.svg'
+import downloadlight from '../assets/downloadlight.svg'
+import csvlight from '../assets/csvlight.svg'
+import uploadlight from '../assets/uploadlight.svg'
 
 function UploadFile({setIsUploaded}) {
   const [allData, setAllData] = useState([]);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null)
   const [employerNumber, setEmployerNumber] = useState(null)
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
    useEffect(()=> {
       const user_id = localStorage.getItem('user_id')
@@ -136,23 +140,40 @@ function UploadFile({setIsUploaded}) {
     }
   }
 
+    useEffect(() => {
+      const updateTheme = () => {
+        const storedTheme = localStorage.getItem("theme");
+        setIsDarkMode(storedTheme === "dark");
+      };
+    
+      // Run initially
+      updateTheme();
+    
+      // Listen for changes to localStorage
+      window.addEventListener("storage", updateTheme);
+    
+      return () => {
+        window.removeEventListener("storage", updateTheme);
+      };
+    }, []); 
+
   return (
-    <div className="upload-container">
+    <div className={`upload-container ${isDarkMode ? 'dark' : 'light'}`}>
       <h2 className="section-title">Bulk Import</h2>
 
       <div className="bulk-import-steps">
         <div className="step">
-          <img src={downloadIcon} alt="Excel Icon" className="step-icon" />
+          <img src={isDarkMode ? downloadlight  : downloadIcon} alt="Excel Icon" className="step-icon" />
           <p><strong>Step 1:</strong> <a target="blank" href="https://docs.google.com/spreadsheets/d/1O2vQNxZylgppKYeBsE6Dc_7eXRiVls-bKFwzCvQThKw/edit?usp=sharing" className="download-link">Download</a> the sample Excel sheet format</p>
         </div>
 
         <div className="step">
-          <img src={csvIcon} alt="Excel Icon" className="step-icon" />
+          <img src={isDarkMode ? csvlight : csvIcon} alt="Excel Icon" className="step-icon" />
           <p><strong>Step 2:</strong> Upload your Excel sheet with customer details</p>
         </div>
 
         <div className="step">
-        <img src={uploadIcon} alt="Excel Icon" className="step-icon" />
+        <img src={isDarkMode ? uploadlight : uploadIcon} alt="Excel Icon" className="step-icon" />
           <p><strong>Step 3:</strong> Click on <span className="highlight-text">"Upload Button"</span></p>
         </div>
       </div>

@@ -55,6 +55,16 @@ body {
   background-color: #f1f5f9;
 }
 
+.content.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.content.dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
 .section {
   background: white;
   padding: 20px;
