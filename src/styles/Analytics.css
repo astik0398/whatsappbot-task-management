@@ -1,0 +1,57 @@
+.dashboard-container {
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .card {
+    border-left: 6px solid #3498db;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 12px;
+    transition: transform 0.2s;
+  }
+  
+  .card h3 {
+    font-size: 1.6rem;
+    color: #444;
+  }
+  
+  .card p {
+    margin-top: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card.overdue {
+    border-left-color: #e74c3c;
+  }
+
+  .card.pending {
+    border-left-color: #ff9900;
+  }
+
+  .card.completed {
+    border-left-color: #64e30f;
+  }
+  

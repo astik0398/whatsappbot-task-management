@@ -9,15 +9,25 @@ import { useNavigate } from "react-router-dom";
 import settings from '../assets/settings.svg'
 import Settings from "./Settings";
 import { FaSun, FaMoon } from "react-icons/fa"; // at the top of your file
+import Analytics from "./Analytics";
+import analyticsIcon from '../assets/analytics.svg'
 
 const Dashboard = () => {
-  const [activeSection, setActiveSection] = useState("Employees");
+  const [activeSection, setActiveSection] = useState("Dashboard");
   const [showUpload, setShowUpload] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false)
   const [theme, setTheme] = useState('light'); // 'light' or 'dark'
   const [name, setName] = useState('')
   const navigate = useNavigate()
   
+  const dummyAnalyticsData = {
+    totalEmployees: 20,
+    totalTasks: 100,
+    completedTasks: 60,
+    pendingTasks: 30,
+    overdueTasks: 10,
+  };
+
   useEffect(() => {
     if (isUploaded) {
       setActiveSection("Entries");
@@ -70,6 +80,16 @@ const Dashboard = () => {
       <div className="sidebar">
         <h2 className="logo">TASK MANAGER</h2>
         <ul>
+        <li
+            className={activeSection === "Dashboard" ? "active" : ""}
+            onClick={() => {
+              setActiveSection("Dashboard");
+              setShowUpload(false);
+            }}
+          >
+            <img width={"20px"} src={analyticsIcon} alt="" />
+            <p>Dashboard</p>
+          </li>
           <li
             className={activeSection === "Employees" ? "active" : ""}
             onClick={() => {
@@ -130,6 +150,11 @@ const Dashboard = () => {
         </div>
         <hr style={{marginBottom:'20px', border:'0', height:'1px', backgroundColor:'#ccc'}}/>
 
+        {activeSection === "Dashboard" && (
+          <div>
+            <Analytics data={dummyAnalyticsData}/>
+          </div>
+        )}
         {activeSection === "Employees" && (
           <div>
             {showUpload ? (
