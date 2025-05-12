@@ -29,12 +29,15 @@ function AddEmployee({ setShowUpload }) {
       }, [])
 
   const handleSubmit = async() => {
+console.log('inside handle sumit function');
 
     const { data: existingUser, error: fetchError } = await supabase
-    .from("tasks")
+    .from("grouped_tasks")
     .select("id")
     .eq("phone", phoneNumber)
     .maybeSingle(); 
+
+    console.log('existingUser', existingUser);
 
   if (fetchError) {
     console.error("Error checking phone number:", fetchError.message);
@@ -48,8 +51,17 @@ function AddEmployee({ setShowUpload }) {
     return;
   }
   
-    const { data, error } = await supabase.from("tasks").insert([
-        { name: name.trim(), phone: phoneNumber,  userId: userId, employerNumber: `whatsapp:+${employerNumber}`}
+    const { data, error } = await supabase.from("grouped_tasks").insert([
+        { name: name.trim(), phone: phoneNumber,  userId: userId, employerNumber: `whatsapp:+${employerNumber}`,  tasks: [
+      {
+        task_details: '',
+        task_done: '',
+        due_date: '',
+        reminder: '',
+        reminder_frequency: '',
+        reason: '',
+      }
+    ] }
       ])
     
       if (error) {

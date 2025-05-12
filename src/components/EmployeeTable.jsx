@@ -37,7 +37,7 @@ function EmployeeTable({flag, setFlag}) {
 
   async function getAllTasks() {
     const { data, error } = await supabase
-      .from("tasks")
+      .from("grouped_tasks")
       .select("name, id ,phone").eq('userId', userId)
 
     if (error) {
@@ -60,7 +60,7 @@ function EmployeeTable({flag, setFlag}) {
   }
 
   async function handleDelete(id){
-    const {error} = await supabase.from('tasks').delete().eq("id", id)
+    const {error} = await supabase.from('grouped_tasks').delete().eq("id", id)
    
     if(error){
         toast.error('Failed to delete the employee!')
@@ -81,7 +81,7 @@ function EmployeeTable({flag, setFlag}) {
   }
 
   async function handleUpdate(){
-    const {error} = await supabase.from('tasks').update({name: name, phone: phoneNumber}).eq('id', id)
+    const {error} = await supabase.from('grouped_tasks').update({name: name, phone: phoneNumber}).eq('id', id)
 
     if(error){
         toast.error('Failed to update the details!')
@@ -128,34 +128,34 @@ function EmployeeTable({flag, setFlag}) {
 
   return (
     <>
-    {filteredTasks.length > 0 ? <div>
       
       <div style={{display:'flex', gap:'15px', marginLeft:'120px', marginBottom:'20px'}}>
       <input className="search-input" type="text" name="" id="" placeholder="Search Employee" onChange={(e)=> setSearchText(e.target.value)}/>
       </div>
+    {filteredTasks.length > 0 ? <div>
 
-      <div style={{maxHeight: '450px', overflowY:'auto'}}>
+      <div style={{maxHeight: '450px', overflowY:'auto',  margin:'auto'}}>
       <table style={{width:'80%', marginTop:'0px'}} className="table">
-        <thead>
-          <tr>
-            <th className="table-header">NAME</th>
-            <th className="table-header">PHONE</th>
-            <th className="table-header">WHATSAPP</th>
-            <th className="table-header">ACTIONS</th>
+        <thead style={{color:'red'}}>
+          <tr >
+            <th style={{textAlign:'center'}} className="table-header">NAME</th>
+            <th style={{textAlign:'center'}} className="table-header">PHONE</th>
+            <th style={{textAlign:'center'}} className="table-header">WHATSAPP</th>
+            <th style={{textAlign:'center'}} className="table-header">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           {filteredTasks.length > 0 &&
             filteredTasks.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                <td className="table-cell">{row.name}</td>
-                <td className="table-cell">{row.phone}</td>
-                <td className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
-                  <img src={isDarkMode ? whatsapplight : whatsapp} alt="WhatsApp" />
+                <td style={{textAlign:'center'}} className="table-cell">{row.name}</td>
+                <td style={{textAlign:'center'}} className="table-cell">{row.phone}</td>
+                <td style={{textAlign:'center'}} className="table-cell whatsapp-icon" onClick={() => handleWhatsappClick(row.phone)}>
+                  <img style={{width:'20px'}} src={isDarkMode ? whatsapplight : whatsapp} alt="WhatsApp" />
                 </td>
                 <td className="table-cell icons" ><div style={{display:'flex', justifyContent:'center', gap:'50px'}}>
                   
-                <span><img onClick={()=> handleEdit(row.name, row.phone, row.id)} src={isDarkMode? editlight :editIcon} alt="" /></span> <span><img onClick={()=> handleDelete(row.id)} src={isDarkMode ? deletelight: deleteIcon} alt="" /></span></div></td>
+                <span><img style={{width:'20px'}} onClick={()=> handleEdit(row.name, row.phone, row.id)} src={isDarkMode? editlight :editIcon} alt="" /></span> <span><img style={{width:'20px'}} onClick={()=> handleDelete(row.id)} src={isDarkMode ? deletelight: deleteIcon} alt="" /></span></div></td>
               </tr>
             ))}
         </tbody>

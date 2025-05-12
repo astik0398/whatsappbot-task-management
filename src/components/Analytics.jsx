@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import supabase from '../supabaseClient';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import '../styles/Analytics.css'
 import CircularProgressBar from './CircularProgressBar';
 
@@ -96,6 +96,7 @@ function Analytics({data}) {
           <CircularProgressBar percentage={60} taskCount={18} />
           </div>
       </div>
+      <ToastContainer/>
     </div>
   )
 }

@@ -84,49 +84,93 @@ function UploadFile({setIsUploaded}) {
     reader.readAsArrayBuffer(file);
   }
 
-  async function addTask(dataArray) {
-    if (!dataArray || dataArray.length === 0) {
-      console.error("No data to insert!");
-      return;
+ async function addTask(dataArray) {
+  if (!dataArray || dataArray.length === 0) {
+    console.error("No data to insert!");
+    return;
+  }
+
+  // Add userId and employerNumber
+  const tasksWithUserId = dataArray.map(task => ({
+    ...task,
+    userId,
+    employerNumber: `whatsapp:+${employerNumber}`,
+  }));
+
+  // Group by name
+  const grouped = {};
+
+  tasksWithUserId.forEach(task => {
+    const name = task.name;
+    if (!grouped[name]) {
+      grouped[name] = {
+        name: task.name,
+        phone: task.phone,
+        userId: task.userId,
+        employerNumber: task.employerNumber,
+        tasks: [],
+      };
     }
 
-    const tasksWithUserId = dataArray.map(task=> ({
-      ...task,
-      userId: userId,
-      employerNumber: `whatsapp:+${employerNumber}`
-    }))
+    grouped[name].tasks.push({
+      task_details: task.tasks || '', // assumes column is 'tasks' in CSV
+      reminder: task.reminder || '',
+      reminder_frequency: task.reminder_frequency || '',
+      reason: task.reason || '',
+      task_done: task.task_done || '',
+      reminder: task.reminder || '',
+      due_date: task.due_date
+    });
+  });
 
-    for (let task of tasksWithUserId) {
-      const { name, phone } = task; 
+  console.log('grouped', grouped);
   
-      const { data, error } = await supabase
-        .from("tasks")
-        .select("id") 
-        .eq("phone", phone)  
-        .single(); 
-  
-      if (data) {
-        console.log(`Skipping task with phone number: ${phone} because it already exists.`);
-        continue;
-      }
-  
-      const { data: insertData, error: insertError } = await supabase
-        .from("tasks")
-        .insert([task]);
-  
-      if (insertError) {
-        console.error("Error inserting task:", insertError);
+
+  // Convert grouped object to array
+  const groupedTasksArray = Object.values(grouped);
+
+  // Upsert grouped tasks by name instead of phone
+  for (let groupedTask of groupedTasksArray) {
+    const { name } = groupedTask;
+
+    const { data, error } = await supabase
+      .from("grouped_tasks")
+      .select("id, tasks")
+      .eq("name", name)
+      .single();
+
+    if (data) {
+      // Update existing
+      const { error: updateError } = await supabase
+        .from("grouped_tasks")
+        .update({
+          tasks: [...data.tasks, ...groupedTask.tasks], // append new tasks
+        })
+        .eq("name", name);
+
+      if (updateError) {
+        console.error("Error updating tasks:", updateError);
       } else {
-        console.log("Inserted task:", insertData);
+        console.log(`Updated tasks for ${name}`);
       }
-    }  
+    } else {
+      // Insert new
+      const { error: insertError } = await supabase
+        .from("grouped_tasks")
+        .insert([groupedTask]);
 
-    await refreshTasks();
-
-    // navigate("/entries");
-    // setIsUploaded(true)
-    window.location.reload()
+      if (insertError) {
+        console.error("Error inserting grouped task:", insertError);
+      } else {
+        console.log("Inserted new grouped task:", groupedTask);
+      }
+    }
   }
+
+  await refreshTasks();
+  // window.location.reload();
+}
+
 
   async function refreshTasks() {
     try {

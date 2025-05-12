@@ -5,7 +5,7 @@ import axios from "axios";
 import whatsapp from "../assets/whatsapp.svg";
 import { toast, ToastContainer } from "react-toastify";
 import noentriestransparent from "../assets/noentry.png";
-import whatsapplight from '../assets/whatsapplight.svg'
+import whatsapplight from "../assets/whatsapplight.svg";
 
 function Table() {
   const [allTasks, setAllTasks] = useState([]);
@@ -14,8 +14,16 @@ function Table() {
   const [userId, setUserId] = useState(null);
   const [activeTab, setActiveTab] = useState("all"); // state to track active tab
   const [searchTerm, setSearchTerm] = useState("");
-    const [isDarkMode, setIsDarkMode] = useState(false);
-  
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const [expandedRows, setExpandedRows] = useState([]);
+
+  const toggleRow = (index) => {
+    setExpandedRows((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
   useEffect(() => {
     const user_id = localStorage.getItem("user_id");
     console.log(typeof user_id);
@@ -30,36 +38,36 @@ function Table() {
   }, [userId]);
 
   async function getAllTasks() {
-    console.log(typeof userId);
-
     const { data, error } = await supabase
-      .from("tasks")
-      .select(
-        "name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason"
-      )
+      .from("grouped_tasks")
+      .select("name, phone, tasks, id")
       .eq("userId", userId)
       .order("id", { ascending: true });
 
     if (error) {
-      throw error;
+      console.error("Error fetching tasks:", error);
+      toast.error("Failed to fetch tasks.");
+      return;
     }
-
-    console.log(data);
 
     if (!data || data.length === 0) {
       toast.error("No data to display...");
       return;
     }
 
+    console.log("data===>", data);
+
     setAllTasks(data);
-    setHeaders(Object.keys(data[0]));
   }
 
   function handleWhatsappClick(phone_number) {
+    console.log("phone_number", phone_number);
+
     window.open(`https://wa.me/${phone_number}`);
   }
 
   async function handleUpdateReminder(
+    userId,
     id,
     status,
     task_done,
@@ -72,7 +80,8 @@ function Table() {
     }`;
 
     console.log(
-      "id, status, task_done, reminder_frequency",
+      "userId, taskid, status, task_done, reminder_frequency",
+      userId,
       id,
       status,
       task_done,
@@ -84,58 +93,83 @@ function Table() {
       return;
     }
 
-    const { error } = await supabase
-      .from("tasks")
-      .update({ reminder: status })
-      .eq("id", id);
+    const { data, error: fetchError } = await supabase
+      .from("grouped_tasks")
+      .select("tasks")
+      .eq("id", userId)
+      .single();
 
-    if (error) {
-      console.error("Error updating reminder:", error);
+    console.log("data", data);
+
+    if (fetchError) {
+      console.error("Failed to fetch tasks", fetchError);
       return;
     }
 
-    console.log("Reminder updated successfully");
+    const updatedTasks = data.tasks.map((task) => {
+      if (task.taskId === id) {
+        console.log("clicked task", task);
 
+        return { ...task, reminder: status === true ? "true" : "false" };
+      }
+      return task;
+    });
+
+    console.log("updatedTasks", updatedTasks);
+
+    const { error: updateError } = await supabase
+      .from("grouped_tasks")
+      .update({ tasks: updatedTasks })
+      .eq("id", userId);
+
+    if (updateError) {
+      console.error("Failed to update reminder", updateError);
+    } else {
+      console.log("Reminder updated successfully");
+    }
     getAllTasks(); // Refresh table after update
 
-    if (status) {
-      axios.post(
-        "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder",
-        { reminder_frequency: reminder_frequency, taskId: id }
-      );
-    }
+    // if (status) {
+    //   axios.post(
+    //     "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder",
+    //     { reminder_frequency: reminder_frequency, taskId: id }
+    //   );
+    // }
   }
 
-  const filteredTasks = allTasks.filter((task) => {
+  const filteredTasks = allTasks.filter((parentTask) => {
     const matchesTab =
       activeTab === "all" ||
-      (activeTab === "pending" && task.task_done === "Pending") ||
-      (activeTab === "incomplete" && task.task_done === "Not Completed") ||
-      (activeTab === "completed" && task.task_done === "Completed");
+      parentTask.tasks.some(
+        (task) =>
+          (activeTab === "pending" && task.task_done === "Pending") ||
+          (activeTab === "incomplete" && task.task_done === "Not Completed") ||
+          (activeTab === "completed" && task.task_done === "Completed")
+      );
 
-    const matchesSearch = task.tasks
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+    const matchesSearch = parentTask.tasks.some((task) =>
+      task.task_details.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return matchesTab && matchesSearch;
   });
 
-   useEffect(() => {
-      const updateTheme = () => {
-        const storedTheme = localStorage.getItem("theme");
-        setIsDarkMode(storedTheme === "dark");
-      };
-    
-      // Run initially
-      updateTheme();
-    
-      // Listen for changes to localStorage
-      window.addEventListener("storage", updateTheme);
-    
-      return () => {
-        window.removeEventListener("storage", updateTheme);
-      };
-    }, []);  
+  useEffect(() => {
+    const updateTheme = () => {
+      const storedTheme = localStorage.getItem("theme");
+      setIsDarkMode(storedTheme === "dark");
+    };
+
+    // Run initially
+    updateTheme();
+
+    // Listen for changes to localStorage
+    window.addEventListener("storage", updateTheme);
+
+    return () => {
+      window.removeEventListener("storage", updateTheme);
+    };
+  }, []);
 
   return (
     <>
@@ -176,105 +210,115 @@ function Table() {
           </button>
         </div>
 
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              padding: "12px",
-              width: "400px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-              marginRight:'350px'
-            }}
-          />
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: "12px",
+            width: "400px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+            marginRight: "350px",
+          }}
+        />
       </div>
 
-      <div style={{ height: "650px", overflowY: "auto", marginTop: "-40px" }}>
-        {allTasks.length > 0 ? (
+      <div style={{ height: "600px", overflowY: "auto", marginTop: "10px" }}>
+        {filteredTasks.length > 0 ? (
           <table className="table">
             <thead>
               <tr>
-                <th className="table-header">NAME</th>
-                {/* <th className="table-header">PHONE</th> */}
-                <th className="table-header">TASKS</th>
-                <th style={{ width: "120px" }} className="table-header">
-                  STATUS
-                </th>
-                <th className="table-header">REASON</th>
-                <th className="table-header">TIMELINE</th>
-                <th className="table-header">SEND REMINDER</th>
-                <th className="table-header">REMINDER FREQUENCY</th>
-                <th className="table-header">WHATSAPP</th>
+                <th style={{ textAlign: "center" }}>ID</th>
+
+                <th style={{ textAlign: "center" }}>NAME</th>
+                <th style={{ textAlign: "center" }}>PHONE</th>
+                <th style={{ textAlign: "center" }}>TASKS</th>
+
+                <th style={{ textAlign: "center" }}>WHATSAPP</th>
               </tr>
             </thead>
             <tbody>
-              {filteredTasks.length > 0 &&
-                filteredTasks.map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    <td className="table-cell">{row.name}</td>
-                    {/* <td className="table-cell">{row.phone}</td> */}
-                    <td className="table-cell">{row.tasks}</td>
-                    <td className="table-cell">
-                      <span
-                        style={{
-                          backgroundColor: `${
-                            row.task_done === "Pending"
-                              ? "orange"
-                              : row.task_done === "Not Completed"
-                              ? "red"
-                              : row.task_done === "Completed"
-                              ? "green"
-                              : ""
-                          }`,
-                          padding: "5px",
-                          borderRadius: "5px",
-                          color: "white",
-                        }}
-                      >
-                        {row.task_done}
-                      </span>
+              {filteredTasks.map((user, index) => (
+                <React.Fragment key={index}>
+                  <tr onClick={() => toggleRow(index)}>
+                    <td style={{ textAlign: "center" }}>{user.id}</td>
+
+                    <td style={{ textAlign: "center" }}>{user.name}</td>
+                    <td style={{ textAlign: "center" }}>{user.phone}</td>
+                    <td style={{ textAlign: "center" }}>
+                      {user.tasks.length} Tasks
                     </td>
-                    <td className="table-cell">{row.reason}</td>
-                    <td className="table-cell">
-                      {row.due_date &&
-                        new Date(row.due_date).toLocaleString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        })}
-                    </td>
-                    <td className="table-cell">
-                      <label className="toggle-switch">
-                        <input
-                          type="checkbox"
-                          checked={row.reminder === "true"}
-                          className="toggle-input"
-                          onChange={(e) =>
-                            handleUpdateReminder(
-                              row.id,
-                              e.target.checked,
-                              row.task_done,
-                              row.reminder_frequency
-                            )
-                          }
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </td>
-                    <td className="table-cell">{row.reminder_frequency}</td>
-                    <td
-                      className="table-cell whatsapp-icon"
-                      onClick={() => handleWhatsappClick(row.phone)}
-                    >
-                      <img src={isDarkMode ? whatsapplight: whatsapp} alt="WhatsApp" />
+                    <td style={{ textAlign: "center" }}>
+                      <img
+                        onClick={() => handleWhatsappClick(user.phone)}
+                        style={{ width: "20px" }}
+                        src={whatsapp}
+                        alt=""
+                      />
                     </td>
                   </tr>
-                ))}
+                  {expandedRows.includes(index) && (
+                    <tr>
+                      <td colSpan="5">
+                        <table className="nested-table">
+                          <thead>
+                            <tr>
+                              <th style={{ textAlign: "center" }}>
+                                Task Details
+                              </th>
+                              <th>Status</th>
+                              <th>Reason</th>
+                              <th>Started At</th>
+
+                              <th>Due Date</th>
+                              <th>Reminder</th>
+                              <th>Frequency</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {user.tasks.map((task, idx) => (
+                              <tr key={idx}>
+                                <td>{task.task_details}</td>
+                                <td>{task.task_done}</td>
+                                <td>{task.reason}</td>
+
+                                <td>
+                                  {new Date(task.due_date).toLocaleString()}
+                                </td>
+                                <td>
+                                  {new Date(task.due_date).toLocaleString()}
+                                </td>
+                                <td>
+                                  <label className="toggle-switch">
+                                    <input
+                                      type="checkbox"
+                                      checked={task.reminder === "true"}
+                                      className="toggle-input"
+                                      onChange={(e) =>
+                                        handleUpdateReminder(
+                                          user.id,
+                                          task.taskId,
+                                          e.target.checked,
+                                          task.task_done,
+                                          task.reminder_frequency
+                                        )
+                                      }
+                                    />
+                                    <span className="slider"></span>
+                                  </label>
+                                </td>
+                                <td>{task.reminder_frequency}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
             </tbody>
           </table>
         ) : (

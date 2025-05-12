@@ -46,7 +46,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.1);
   margin: auto;
   margin-top: 50px;
 }
@@ -125,7 +125,7 @@
 }
 
 ::-webkit-scrollbar{
-  width: 8px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-thumb{
@@ -233,4 +233,169 @@
 .tab-buttons button:hover {
   background-color: #007BFF;
   color: white;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Collapsible row */
+.nested-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fafafa;
+  margin-top: 0.5rem;
+}
+
+.nested-table th, .nested-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+th, td{
+  text-align: center;
+}
+
+.nested-table th {
+  background-color: #e9e9e9;
+  color: #444;
+}
+
+.nested-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.search-input{
+  width: 30%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.search-button{
+  font-size: 14px;
+  padding: 4px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  background-color:#007bff;
+  color: white;
+}
+
+.tab-buttons {
+  display: flex;
+  margin: auto;
+  border: 1px solid #ccc;
+  width: fit-content;
+  padding: 2px;
+  border-radius: 5px;
+  gap: 0px;
+}
+
+.tab-buttons button {
+  padding: 10px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+  border: none;
+  color: black;
+}
+
+#btn-all{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+#btn-pending{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-left: 0;
+}
+
+#btn-incomplete{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-left: 0;
+
+}
+
+#btn-completed{
+
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.tab-buttons button:last-child {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.tab-buttons button:first-child {
+  margin-left: 0;
+}
+
+/* Highlight the active tab */
+.tab-buttons .active {
+  background-color: #007BFF;
+  color: white;
+  border-color: #007BFF;
+}
+
+.tab-buttons button:hover {
+  background-color: #007BFF;
+  color: white;
+}
+
+/* Optional: Make it responsive */
+@media (max-width: 768px) {
+  .table, .nested-table {
+    font-size: 12px;
+  }
+
+  .table th, .table td, .nested-table th, .nested-table td {
+    padding: 8px;
+  }
 }
