@@ -129,12 +129,12 @@ function Table() {
     }
     getAllTasks(); // Refresh table after update
 
-    // if (status) {
-    //   axios.post(
-    //     "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder",
-    //     { reminder_frequency: reminder_frequency, taskId: id }
-    //   );
-    // }
+    if (status) {
+      axios.post(
+        "http://localhost:8000/update-reminder",
+        { reminder_frequency: reminder_frequency, taskId: id }
+      );
+    }
   }
 
   const filteredTasks = allTasks.filter((parentTask) => {
@@ -285,7 +285,7 @@ function Table() {
                                 <td>{task.reason}</td>
 
                                 <td>
-                                  {new Date(task.due_date).toLocaleString()}
+                                   {task.started_at ?  new Date(task.started_at).toLocaleString() : 'No start time'}
                                 </td>
                                 <td>
                                   {new Date(task.due_date).toLocaleString()}
