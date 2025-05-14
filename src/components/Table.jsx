@@ -130,10 +130,10 @@ function Table() {
     getAllTasks(); // Refresh table after update
 
     if (status) {
-      axios.post(
-        "http://localhost:8000/update-reminder",
-        { reminder_frequency: reminder_frequency, taskId: id }
-      );
+      axios.post("http://localhost:8000/update-reminder", {
+        reminder_frequency: reminder_frequency,
+        taskId: id,
+      });
     }
   }
 
@@ -248,7 +248,12 @@ function Table() {
                     <td style={{ textAlign: "center" }}>{user.name}</td>
                     <td style={{ textAlign: "center" }}>{user.phone}</td>
                     <td style={{ textAlign: "center" }}>
-                      {user.tasks.length} Tasks
+                      {
+                        user.tasks.filter(
+                          (task) => task.task_details.trim() !== ""
+                        ).length
+                      }{" "}
+                      Tasks{" "}
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <img
@@ -262,58 +267,74 @@ function Table() {
                   {expandedRows.includes(index) && (
                     <tr>
                       <td colSpan="5">
-                        <table className="nested-table">
-                          <thead>
-                            <tr>
-                              <th style={{ textAlign: "center" }}>
-                                Task Details
-                              </th>
-                              <th>Status</th>
-                              <th>Reason</th>
-                              <th>Started At</th>
+                        {user.tasks.every(
+                          (task) => task.task_details.trim() === ""
+                        ) ? (
+                          <p style={{ textAlign: "center" }}>
+                            No tasks with details available
+                          </p>
+                        ) : (
+                          <table className="nested-table">
+                            <thead>
+                              <tr>
+                                <th style={{ textAlign: "center" }}>
+                                  Task Details
+                                </th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                                <th>Started At</th>
 
-                              <th>Due Date</th>
-                              <th>Reminder</th>
-                              <th>Frequency</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {user.tasks.map((task, idx) => (
-                              <tr key={idx}>
-                                <td>{task.task_details}</td>
-                                <td>{task.task_done}</td>
-                                <td>{task.reason}</td>
-
-                                <td>
-                                   {task.started_at ?  new Date(task.started_at).toLocaleString() : 'No start time'}
-                                </td>
-                                <td>
-                                  {new Date(task.due_date).toLocaleString()}
-                                </td>
-                                <td>
-                                  <label className="toggle-switch">
-                                    <input
-                                      type="checkbox"
-                                      checked={task.reminder === "true"}
-                                      className="toggle-input"
-                                      onChange={(e) =>
-                                        handleUpdateReminder(
-                                          user.id,
-                                          task.taskId,
-                                          e.target.checked,
-                                          task.task_done,
-                                          task.reminder_frequency
-                                        )
-                                      }
-                                    />
-                                    <span className="slider"></span>
-                                  </label>
-                                </td>
-                                <td>{task.reminder_frequency}</td>
+                                <th>Due Date</th>
+                                <th>Reminder</th>
+                                <th>Frequency</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody>
+                              {user.tasks
+                                .filter(
+                                  (task) => task.task_details.trim() !== ""
+                                )
+                                .map((task, idx) => (
+                                  <tr key={idx}>
+                                    <td>{task.task_details}</td>
+                                    <td>{task.task_done}</td>
+                                    <td>{task.reason}</td>
+
+                                    <td>
+                                      {task.started_at
+                                        ? new Date(
+                                            task.started_at
+                                          ).toLocaleString()
+                                        : "No start time"}
+                                    </td>
+                                    <td>
+                                      {new Date(task.due_date).toLocaleString()}
+                                    </td>
+                                    <td>
+                                      <label className="toggle-switch">
+                                        <input
+                                          type="checkbox"
+                                          checked={task.reminder === "true"}
+                                          className="toggle-input"
+                                          onChange={(e) =>
+                                            handleUpdateReminder(
+                                              user.id,
+                                              task.taskId,
+                                              e.target.checked,
+                                              task.task_done,
+                                              task.reminder_frequency
+                                            )
+                                          }
+                                        />
+                                        <span className="slider"></span>
+                                      </label>
+                                    </td>
+                                    <td>{task.reminder_frequency}</td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        )}
                       </td>
                     </tr>
                   )}
