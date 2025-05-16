@@ -130,7 +130,7 @@ function Table() {
     getAllTasks(); // Refresh table after update
 
     if (status) {
-      axios.post("http://localhost:8000/update-reminder", {
+      axios.post("https://whatsappbot-task-management-be-production.up.railway.app/update-reminder", {
         reminder_frequency: reminder_frequency,
         taskId: id,
       });

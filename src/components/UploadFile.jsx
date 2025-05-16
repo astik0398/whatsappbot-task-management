@@ -168,7 +168,7 @@ function UploadFile({setIsUploaded}) {
   }
 
   await refreshTasks();
-  // window.location.reload();
+  window.location.reload();
 }
 
 
