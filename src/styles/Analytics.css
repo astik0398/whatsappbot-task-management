@@ -26,6 +26,10 @@
     border-radius: 12px;
     transition: transform 0.2s;
   }
+
+  .card.dark {
+        box-shadow: rgba(255, 255, 255, 0.8) 0px 2px 8px;
+  }
   
   .card h3 {
     font-size: 1.6rem;

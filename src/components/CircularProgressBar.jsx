@@ -1,9 +1,9 @@
 import React from 'react';
 import '../styles/CircularProgressBar.css';
 
-const CircularProgressBar = ({ percentage, taskCount, color = "#7a5fff" }) => {
+const CircularProgressBar = ({ percentage, taskCount, color }) => {
   const radius = 85;
-  const stroke = 10;
+  const stroke = 8;
   const normalizedRadius = radius - stroke * 0.5;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -33,8 +33,8 @@ const CircularProgressBar = ({ percentage, taskCount, color = "#7a5fff" }) => {
         />
       </svg>
       <div className="circular-text">
-        <strong>{percentage}%</strong>
-        <div>{taskCount} Tasks</div>
+        <strong style={{fontSize:'30px'}}>{percentage}%</strong>
+        <div style={{fontSize:'18px'}}><strong>{taskCount} Tasks</strong></div>
       </div>
     </div>
   );

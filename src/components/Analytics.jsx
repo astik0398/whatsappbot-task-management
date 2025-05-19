@@ -12,7 +12,8 @@ function Analytics({data}) {
       const [overdueTasks, setOverdueTasks] = useState(null)
       const [tasks, setAllTasks] = useState([])
       const [totalTasks, setTotalTasks] = useState(null)
-
+        const [isDarkMode, setIsDarkMode] = useState(false);
+      
       useEffect(() => {
         const user_id = localStorage.getItem("user_id");
         console.log(typeof user_id);
@@ -36,9 +37,9 @@ function Analytics({data}) {
         console.log(typeof userId);
     
         const { data, error } = await supabase
-          .from("tasks")
+          .from("grouped_tasks")
           .select(
-            "name, phone, tasks, task_done, due_date, reminder, id, reminder_frequency, reason"
+            "name, phone, tasks"
           )
           .eq("userId", userId)
           .order("id", { ascending: true });
@@ -47,7 +48,7 @@ function Analytics({data}) {
           throw error;
         }
     
-        console.log(data);
+        console.log('inside analytics page data',data);
     
         if (!data || data.length === 0) {
           toast.error("No data to display...");
@@ -57,10 +58,23 @@ function Analytics({data}) {
         setAllTasks(data);
         setTotalEmployee(data.length)
 
-        data.forEach(item=> item.task_done === 'Pending' && count++)
-        data.forEach(item=> item.task_done ==='Completed' && completed++)
-        data.forEach(item=> item.task_done === "Not Completed" && notCompleted++)
-        data.forEach(item=> item.tasks !== "" && tasks++)
+        data.forEach((item)=> {
+          item.tasks.map(it=> it.task_done === "Pending" && count++)
+        })
+
+data.forEach((item)=> {
+          item.tasks.map(it=> it.task_done === "Not Completed" && notCompleted++)
+        })
+  
+        data.forEach((item, ind)=> {
+
+          item.tasks.map(it=> it.task_details !== "" && tasks++)
+          
+        })
+
+        data.forEach((item)=> {
+          item.tasks.map(it=> it.task_done === "Completed" && completed++)
+        })
 
         setOverdueTasks(notCompleted)
         setPendingTasks(count)
@@ -68,32 +82,56 @@ function Analytics({data}) {
         setTotalTasks(tasks)
       }
 
+      const completionPercentage = totalTasks
+    ? Math.round((completedTasks / totalTasks) * 100)
+    : 0;
+
+    const progressColor =
+  completionPercentage >= 75 ? '#28a745' : completionPercentage >= 50 ? '#ffc107' : '#dc3545';
+
+  useEffect(() => {
+      const updateTheme = () => {
+        const storedTheme = localStorage.getItem("theme");
+        setIsDarkMode(storedTheme === "dark");
+      };
+    
+      // Run initially
+      updateTheme();
+    
+      // Listen for changes to localStorage
+      window.addEventListener("storage", updateTheme);
+    
+      return () => {
+        window.removeEventListener("storage", updateTheme);
+      };
+    }, []); 
+
   return (
     <div className="dashboard-container">
       <div className="card-grid">
-        <div className="card">
+        <div className={`card ${isDarkMode ? 'dark' : ''}`}>
           <h3>Total Employees</h3>
           <p>{totalEmployee}</p>
         </div>
-        <div className="card">
+        <div className={`card ${isDarkMode ? 'dark' : ''}`}>
           <h3>Total Tasks</h3>
           <p>{totalTasks}</p>
         </div>
-        <div className="card completed">
+        <div className={`card ${isDarkMode ? 'dark' : ''} completed`}>
           <h3>Completed Tasks</h3>
           <p>{completedTasks}</p>
         </div>
-        <div className="card pending">
+        <div className={`card ${isDarkMode ? 'dark' : ''} pending`}>
           <h3>Pending Tasks</h3>
           <p>{pendingTasks}</p>
         </div>
-        <div className="card overdue">
+        <div className={`card ${isDarkMode ? 'dark' : ''} overdue`}>
           <h3>Overdue Tasks</h3>
           <p>{overdueTasks}</p>
         </div>
 
-        <div className="card progress-bar">
-          <CircularProgressBar percentage={60} taskCount={18} />
+        <div className={`card ${isDarkMode ? 'dark' : ''} progress-bar`}>
+          <CircularProgressBar percentage={completionPercentage} taskCount={totalTasks} color={progressColor}/>
           </div>
       </div>
       <ToastContainer/>
