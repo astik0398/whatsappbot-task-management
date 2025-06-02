@@ -35,6 +35,7 @@ console.log('inside handle sumit function');
     .from("grouped_tasks")
     .select("id")
     .eq("phone", phoneNumber)
+    .eq("userId", userId)
     .maybeSingle(); 
 
     console.log('existingUser', existingUser);
