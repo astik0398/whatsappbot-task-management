@@ -54,7 +54,7 @@ function ForgotPassword() {
         <button type="submit">Send Reset Link</button>
       </form>
     </div>
-    <ToastContainer />
+    <ToastContainer autoClose={2000}/>
 
     </div>
   );

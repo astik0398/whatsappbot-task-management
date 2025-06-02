@@ -87,7 +87,7 @@ function Login() {
       <button type="submit">Login</button>
     </form>
         </div>
-        <ToastContainer />
+        <ToastContainer autoClose={2000}/>
     </div>
   );
 }

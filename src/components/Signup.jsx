@@ -57,11 +57,11 @@ function Signup() {
       console.error(error);
       return
     } else {
-      toast.success('Signup successful!');
+      toast.success('Signup successful! Please verify your gmail');
 
       setTimeout(() => {
         navigate('/login')
-      }, 2000);
+      }, 5000);
     }
   }
 

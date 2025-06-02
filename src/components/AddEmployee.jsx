@@ -135,7 +135,7 @@ console.log('inside handle sumit function');
         </div>
       )}
     </div>
-    <ToastContainer/>
+    <ToastContainer autoClose={2000}/>
     </>
   );
 }

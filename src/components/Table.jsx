@@ -349,7 +349,7 @@ function Table() {
             src={noentriestransparent}
           />
         )}
-        <ToastContainer position="bottom-center" theme="colored" />
+        <ToastContainer autoClose={2000} theme="colored" />
       </div>
     </>
   );

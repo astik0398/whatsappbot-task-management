@@ -263,7 +263,7 @@ function EmployeeTable({flag, setFlag}) {
 
     </div> : <img src={noemployee} width={'60%'}/>}
 
-    <ToastContainer/>
+    <ToastContainer autoClose={2000}/>
 
     </>
   );
