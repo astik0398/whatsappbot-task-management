@@ -79,6 +79,7 @@ const Dashboard = () => {
     
       <div className="sidebar">
         <h2 className="logo">TASK MANAGER</h2>
+        <span style={{marginTop:'-10px'}}>{`(+${localStorage.getItem('employer_number')})`}</span>
         <ul>
         <li
             className={activeSection === "Dashboard" ? "active" : ""}
