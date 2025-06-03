@@ -53,7 +53,7 @@ console.log('inside handle sumit function');
   }
   
     const { data, error } = await supabase.from("grouped_tasks").insert([
-        { name: name.trim(), phone: phoneNumber,  userId: userId, employerNumber: `whatsapp:+${employerNumber}`,  tasks: [
+        { name: name.toUpperCase().trim(), phone: phoneNumber,  userId: userId, employerNumber: `whatsapp:+${employerNumber}`,  tasks: [
       {
         task_details: '',
         task_done: '',

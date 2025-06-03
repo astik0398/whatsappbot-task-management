@@ -134,7 +134,7 @@ data.forEach((item)=> {
           <CircularProgressBar percentage={completionPercentage} taskCount={totalTasks} color={progressColor}/>
           </div>
       </div>
-      <ToastContainer autoClose={2000}/>
+      {/* <ToastContainer autoClose={2000}/> */}
     </div>
   )
 }

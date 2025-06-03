@@ -65,7 +65,9 @@ function UploadFile({setIsUploaded}) {
           let value = row[index] || ""; // if there's no value, set it as an empty string
 
           if (header.toLowerCase() === 'name' && typeof value === 'string') {
-            value = value.trim(); // Trim leading and trailing spaces
+            console.log('value inside upload file component===>', value);
+            
+            value = value.trim().toUpperCase(); // Trim leading and trailing spaces
           }
 
         obj[header] = value;
