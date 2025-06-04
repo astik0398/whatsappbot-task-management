@@ -297,7 +297,7 @@ function Table() {
                                 .map((task, idx) => (
                                   <tr key={idx}>
                                     <td>{task.task_details}</td>
-                                    <td>{task.task_done}</td>
+                                    <td><span style={{backgroundColor: task.task_done === 'Pending' ? 'orange' : task.task_done === 'Completed' ? 'green' : 'red', padding:'6px', color:'white', borderRadius:'6px'}}>{task.task_done}</span></td>
                                     <td>{task.reason}</td>
 
                                     <td>
