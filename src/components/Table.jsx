@@ -130,10 +130,13 @@ function Table() {
     getAllTasks(); // Refresh table after update
 
     if (status) {
-      axios.post("https://whatsappbot-task-management-be-production.up.railway.app/update-reminder", {
-        reminder_frequency: reminder_frequency,
-        taskId: id,
-      });
+      axios.post(
+        "https://whatsappbot-task-management-be-production.up.railway.app/update-reminder",
+        {
+          reminder_frequency: reminder_frequency,
+          taskId: id,
+        }
+      );
     }
   }
 
@@ -170,6 +173,10 @@ function Table() {
       window.removeEventListener("storage", updateTheme);
     };
   }, []);
+
+  const hasNotes = filteredTasks.some((user) =>
+    user.tasks.some((task) => task.hasOwnProperty("notes"))
+  );
 
   return (
     <>
@@ -280,6 +287,7 @@ function Table() {
                                 <th style={{ textAlign: "center" }}>
                                   Task Details
                                 </th>
+                                {hasNotes && <th>Notes</th>}
                                 <th>Status</th>
                                 <th>Reason</th>
                                 <th>Started At</th>
@@ -297,7 +305,47 @@ function Table() {
                                 .map((task, idx) => (
                                   <tr key={idx}>
                                     <td>{task.task_details}</td>
-                                    <td><span style={{backgroundColor: task.task_done === 'Pending' ? 'orange' : task.task_done === 'Completed' ? 'green' : 'red', padding:'6px', color:'white', borderRadius:'6px'}}>{task.task_done}</span></td>
+                                    {hasNotes && (
+                                      <td>
+                                        {task.hasOwnProperty("notes") ? (
+                                          <>
+                                            Order ID: {task.notes.order_id}{" "}
+                                            <br />
+                                            Handled By: {
+                                              task.notes.handled_by
+                                            }{" "}
+                                            <br />
+                                            Bakery Location:{" "}
+                                            {task.notes.bakery_location} <br />
+                                            Payment Mode:{" "}
+                                            {task.notes.payment_mode}
+                                          </>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </td>
+                                    )}
+                                    <td>
+                                      <span
+                                        style={{
+                                          backgroundColor:
+                                            task.task_done === "Pending"
+                                              ? "orange"
+                                              : task.task_done === "Completed"
+                                              ? "green"
+                                              : task.task_done ===
+                                                "Not Completed"
+                                              ? "red"
+                                              : "",
+
+                                          padding: "6px",
+                                          color: "white",
+                                          borderRadius: "6px",
+                                        }}
+                                      >
+                                        {task.task_done}
+                                      </span>
+                                    </td>
                                     <td>{task.reason}</td>
 
                                     <td>
