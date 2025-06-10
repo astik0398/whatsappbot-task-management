@@ -178,6 +178,9 @@ function Table() {
     user.tasks.some((task) => task.hasOwnProperty("notes"))
   );
 
+  console.log('hasNotes===>',hasNotes);
+  
+
   return (
     <>
       <div
@@ -305,27 +308,21 @@ function Table() {
                                 .map((task, idx) => (
                                   <tr key={idx}>
                                     <td>{task.task_details}</td>
-                                    {hasNotes && (
-                                      <td>
-                                        {task.hasOwnProperty("notes") ? (
-                                          <>
-                                            Order ID: {task.notes.order_id}{" "}
-                                            <br />
-                                            Handled By: {
-                                              task.notes.handled_by
-                                            }{" "}
-                                            <br />
-                                            Bakery Location:{" "}
-                                            {task.notes.bakery_location} <br />
-                                            Payment Mode:{" "}
-                                            {task.notes.payment_mode}
-                                          </>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </td>
-                                    )}
-                                    <td>
+                                   {hasNotes && (
+  <td>
+    {task.notes && typeof task.notes === "object" ? (
+      <>
+        Order ID: {task.notes.order_id ?? "N/A"} <br />
+        Handled By: {task.notes.handled_by ?? "N/A"} <br />
+        Bakery Location: {task.notes.bakery_location ?? "N/A"} <br />
+        Payment Mode: {task.notes.payment_mode ?? "N/A"}
+      </>
+    ) : (
+      ""
+    )}
+  </td>
+)}
+                                    <td style={{ minWidth: "120px",}}>
                                       <span
                                         style={{
                                           backgroundColor:
@@ -348,14 +345,14 @@ function Table() {
                                     </td>
                                     <td>{task.reason}</td>
 
-                                    <td>
+                                    <td style={{ minWidth: "150px",}}>
                                       {task.started_at
                                         ? new Date(
                                             task.started_at
                                           ).toLocaleString()
                                         : "No start time"}
                                     </td>
-                                    <td>
+                                    <td style={{ minWidth: "150px",}}>
                                       {new Date(task.due_date).toLocaleString()}
                                     </td>
                                     <td>
