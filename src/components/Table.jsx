@@ -6,6 +6,8 @@ import whatsapp from "../assets/whatsapp.svg";
 import { toast, ToastContainer } from "react-toastify";
 import noentriestransparent from "../assets/noentry.png";
 import whatsapplight from "../assets/whatsapplight.svg";
+import actionEdit from "../assets/editIcon.svg";
+import actionDelete from "../assets/deleteIcon.svg";
 
 function Table() {
   const [allTasks, setAllTasks] = useState([]);
@@ -15,8 +17,11 @@ function Table() {
   const [activeTab, setActiveTab] = useState("all"); // state to track active tab
   const [searchTerm, setSearchTerm] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
+  const [taskDetails, setTaskDetails] = useState("");
+  const [note, setNote] = useState("");
+  const [taskId, setTaskId] = useState("");
 
   const toggleRow = (index) => {
     setExpandedRows((prev) =>
@@ -178,8 +183,178 @@ function Table() {
     user.tasks.some((task) => task.hasOwnProperty("notes"))
   );
 
-  console.log('hasNotes===>',hasNotes);
+  console.log("hasNotes===>", hasNotes);
+
+  function handleEdit(task) {
+    console.log(task);
+    console.log(task.notes);
+    setShowModal(true);
+    setTaskDetails(task.task_details);
+    setNote(task.notes);
+    setTaskId(task.taskId);
+  }
+
+ async function handleDelete(task) {
+  console.log(task, 'task inside handleDelete');
   
+  try {
+    // Validate taskId
+    if (!task.taskId) {
+      console.error("No taskId provided for deletion.");
+      toast.error("Invalid task.");
+      return;
+    }
+
+    // Fetch all records for the user
+    const { data, error: fetchError } = await supabase
+      .from("grouped_tasks")
+      .select("tasks, id")
+      .eq("userId", userId);
+
+    if (fetchError) {
+      console.error("Failed to fetch tasks:", fetchError);
+      toast.error("Failed to fetch tasks.");
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.error("No tasks found for the user.");
+      toast.error("No tasks found.");
+      return;
+    }
+
+    // Find the record containing the task with the matching taskId
+    let updatedRecord = null;
+    let recordId = null;
+
+    for (const record of data) {
+      const taskIndex = record.tasks.findIndex((t) => t.taskId === task.taskId);
+      if (taskIndex !== -1) {
+        // Found the record and task
+        updatedRecord = {
+          ...record,
+          tasks: record.tasks.filter((_, index) => index !== taskIndex),
+        };
+        recordId = record.id;
+        break;
+      }
+    }
+
+    if (!updatedRecord) {
+      console.error("Task with taskId not found:", task.taskId);
+      toast.error("Task not found.");
+      return;
+    }
+
+    // Update the specific record in Supabase
+    const { error: updateError } = await supabase
+      .from("grouped_tasks")
+      .update({ tasks: updatedRecord.tasks })
+      .eq("id", recordId);
+
+    if (updateError) {
+      console.error("Failed to delete task:", updateError);
+      toast.error("Failed to delete task.");
+      return;
+    }
+
+    // Refresh the task list
+    await getAllTasks();
+
+    // Show success message
+    toast.success("Task deleted successfully!");
+  } catch (error) {
+    console.error("Error in handleDelete:", error);
+    toast.error("An unexpected error occurred.");
+  }
+}
+
+  async function handleUpdate() {
+    try {
+      // Validate inputs
+      if (!taskDetails.trim()) {
+        toast.error("Task details cannot be empty!");
+        return;
+      }
+
+      // Fetch all records for the user
+      const { data, error: fetchError } = await supabase
+        .from("grouped_tasks")
+        .select("tasks, id")
+        .eq("userId", userId);
+
+      if (fetchError) {
+        console.error("Failed to fetch tasks:", fetchError);
+        toast.error("Failed to fetch tasks.");
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.error("No tasks found for the user.");
+        toast.error("No tasks found.");
+        return;
+      }
+
+      // Find the record containing the task with the matching taskId
+      let updatedRecord = null;
+      let recordId = null;
+
+      for (const record of data) {
+        const taskIndex = record.tasks.findIndex(
+          (task) => task.taskId === taskId
+        );
+        if (taskIndex !== -1) {
+          // Found the record and task
+          updatedRecord = {
+            ...record,
+            tasks: record.tasks.map((task, index) => {
+              if (index === taskIndex) {
+                return {
+                  ...task,
+                  task_details: taskDetails,
+                  notes: note,
+                };
+              }
+              return task;
+            }),
+          };
+          recordId = record.id;
+          break;
+        }
+      }
+
+      if (!updatedRecord) {
+        console.error("Task with taskId not found:", taskId);
+        toast.error("Task not found.");
+        return;
+      }
+
+      // Update the specific record in Supabase
+      const { error: updateError } = await supabase
+        .from("grouped_tasks")
+        .update({ tasks: updatedRecord.tasks })
+        .eq("id", recordId);
+
+      if (updateError) {
+        console.error("Failed to update task:", updateError);
+        toast.error("Failed to update task.");
+        return;
+      }
+
+      // Refresh the task list
+      await getAllTasks();
+
+      // Reset modal state and show success message
+      setShowModal(false);
+      setTaskDetails("");
+      setNote("");
+      setTaskId("");
+      toast.success("Task updated successfully!");
+    } catch (error) {
+      console.error("Error in handleUpdate:", error);
+      toast.error("An unexpected error occurred.");
+    }
+  }
 
   return (
     <>
@@ -298,6 +473,7 @@ function Table() {
                                 <th>Due Date</th>
                                 <th>Reminder</th>
                                 <th>Frequency</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -308,21 +484,31 @@ function Table() {
                                 .map((task, idx) => (
                                   <tr key={idx}>
                                     <td>{task.task_details}</td>
-                                   {hasNotes && (
-  <td>
-    {task.notes && typeof task.notes === "object" ? (
-      <>
-        Order ID: {task.notes.order_id ?? "N/A"} <br />
-        Handled By: {task.notes.handled_by ?? "N/A"} <br />
-        Bakery Location: {task.notes.bakery_location ?? "N/A"} <br />
-        Payment Mode: {task.notes.payment_mode ?? "N/A"}
-      </>
-    ) : (
-      ""
-    )}
-  </td>
-)}
-                                    <td style={{ minWidth: "120px",}}>
+                                    {hasNotes && (
+                                      <td>
+                                        {task.notes &&
+                                        typeof task.notes === "object" ? (
+                                          <>
+                                            Order ID:{" "}
+                                            {task.notes.order_id ?? "N/A"}{" "}
+                                            <br />
+                                            Handled By:{" "}
+                                            {task.notes.handled_by ??
+                                              "N/A"}{" "}
+                                            <br />
+                                            Bakery Location:{" "}
+                                            {task.notes.bakery_location ??
+                                              "N/A"}{" "}
+                                            <br />
+                                            Payment Mode:{" "}
+                                            {task.notes.payment_mode ?? "N/A"}
+                                          </>
+                                        ) : (
+                                          task.notes
+                                        )}
+                                      </td>
+                                    )}
+                                    <td style={{ minWidth: "120px" }}>
                                       <span
                                         style={{
                                           backgroundColor:
@@ -345,14 +531,14 @@ function Table() {
                                     </td>
                                     <td>{task.reason}</td>
 
-                                    <td style={{ minWidth: "150px",}}>
+                                    <td style={{ minWidth: "150px" }}>
                                       {task.started_at
                                         ? new Date(
                                             task.started_at
                                           ).toLocaleString()
                                         : "No start time"}
                                     </td>
-                                    <td style={{ minWidth: "150px",}}>
+                                    <td style={{ minWidth: "150px" }}>
                                       {new Date(task.due_date).toLocaleString()}
                                     </td>
                                     <td>
@@ -375,6 +561,33 @@ function Table() {
                                       </label>
                                     </td>
                                     <td>{task.reminder_frequency}</td>
+
+                                    <td className="table-cell icons">
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          gap: "30px",
+                                        }}
+                                      >
+                                        <span>
+                                          <img
+                                            src={actionEdit}
+                                            style={{ width: "20px" }}
+                                            onClick={() => handleEdit(task)}
+                                            alt=""
+                                          />
+                                        </span>{" "}
+                                        <span>
+                                          <img
+                                            src={actionDelete}
+                                            style={{ width: "20px" }}
+                                            onClick={() => handleDelete(task)}
+                                            alt=""
+                                          />
+                                        </span>
+                                      </div>
+                                    </td>
                                   </tr>
                                 ))}
                             </tbody>
@@ -393,6 +606,121 @@ function Table() {
             width={"70%"}
             src={noentriestransparent}
           />
+        )}
+
+        {showModal && (
+          <div
+            className="modal-overlay"
+            style={{
+              position: "fixed",
+              top: "0",
+              left: "0",
+              right: "0",
+              bottom: "0",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: "1000",
+            }}
+          >
+            <div
+              className="modal"
+              style={{
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "8px",
+                width: "500px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "18px",
+                  marginBottom: "20px",
+                  color: "#333",
+                }}
+              >
+                Edit Task
+              </h2>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Edit Task Detail"
+                style={{
+                  padding: "10px",
+                  marginBottom: "10px",
+                  width: "100%",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  boxSizing: "border-box",
+                }}
+                value={taskDetails}
+                onChange={(e) => setTaskDetails(e.target.value)}
+              />
+
+              <input
+                type="text"
+                name="note"
+                placeholder="Add a Note"
+                style={{
+                  padding: "10px",
+                  marginBottom: "20px",
+                  width: "100%",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  boxSizing: "border-box",
+                }}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+
+              <div
+                className="btn-div"
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  className="button-save"
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    width: "45%",
+                  }}
+                  onClick={handleUpdate}
+                >
+                  Update
+                </button>
+
+                <span
+                  onClick={() => setShowModal(false)}
+                  className="modal-close"
+                  style={{
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    color: "#999",
+                    padding: "5px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  &times;
+                </span>
+              </div>
+            </div>
+          </div>
         )}
         <ToastContainer autoClose={2000} theme="colored" />
       </div>
