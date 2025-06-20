@@ -29,6 +29,11 @@ function AddEmployee({ setShowUpload }) {
       }, [])
 
   const handleSubmit = async() => {
+
+    if(!name || !phoneNumber){
+      toast.error('Name and numbber fields cannot be empty!')
+      return
+    }
 console.log('inside handle sumit function');
 
     const { data: existingUser, error: fetchError } = await supabase

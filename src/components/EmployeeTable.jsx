@@ -10,6 +10,7 @@ import noemployee from '../assets/noemployee.png'
 import whatsapplight from '../assets/whatsapplight.svg'
 import editlight from '../assets/editlight.svg'
 import deletelight from '../assets/deletelight.svg'
+import PhoneInput from "react-phone-input-2";
 
 function EmployeeTable({flag, setFlag}) {
   const [allTasks, setAllTasks] = useState([]);
@@ -81,6 +82,11 @@ function EmployeeTable({flag, setFlag}) {
   }
 
   async function handleUpdate(){
+
+    if(!phoneNumber || !name){
+      toast.error('Name and number fields cannot be empty!')
+      return
+    }
     const {error} = await supabase.from('grouped_tasks').update({name: name, phone: phoneNumber}).eq('id', id)
 
     if(error){
@@ -206,7 +212,7 @@ function EmployeeTable({flag, setFlag}) {
       onChange={(e)=> setName(e.target.value)}
     />
     
-    <input
+    {/* <input
       type="number"
       name="phone"
       placeholder="Enter Phone Number"
@@ -220,8 +226,14 @@ function EmployeeTable({flag, setFlag}) {
       }}
       value={phoneNumber}
       onChange={(e)=> setPhoneNumber(e.target.value)}
-    />
+    /> */}
     
+     <PhoneInput
+            country="in"  // Default country
+            value={phoneNumber}
+            onChange={(e)=> setPhoneNumber(e)}
+          />
+
     <div className="btn-div" style={{
       display: 'flex',
       justifyContent: 'end',
