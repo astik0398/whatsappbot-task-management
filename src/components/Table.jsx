@@ -356,6 +356,25 @@ function Table() {
     }
   }
 
+  const formatReminderDateTime = (dateTimeStr) => {
+  if (!dateTimeStr) return "";
+  const [datePart, timePart] = dateTimeStr.split(" ");
+  const date = new Date(datePart + "T" + timePart);
+
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+      ? "nd"
+      : day % 10 === 3 && day !== 13
+      ? "rd"
+      : "th";
+
+  return `once on ${day}${suffix} at ${timePart}`;
+};
+
   return (
     <>
       <div
@@ -560,7 +579,7 @@ function Table() {
                                         <span className="slider"></span>
                                       </label>
                                     </td>
-                                    <td>{task.reminder_frequency}</td>
+                                    <td>{task.reminder_type === "recurring" ? task.reminder_frequency : formatReminderDateTime(task.reminderDateTime)}</td>
 
                                     <td className="table-cell icons">
                                       <div
