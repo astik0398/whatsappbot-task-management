@@ -372,7 +372,7 @@ function Table() {
       ? "rd"
       : "th";
 
-  return `once on ${day}${suffix} at ${timePart}`;
+  return `once on ${day}${suffix} ${month} at ${timePart}`;
 };
 
   return (
