@@ -8,6 +8,7 @@ import noentriestransparent from "../assets/noentry.png";
 import whatsapplight from "../assets/whatsapplight.svg";
 import actionEdit from "../assets/editIcon.svg";
 import actionDelete from "../assets/deleteIcon.svg";
+import moment from "moment";
 
 function Table() {
   const [allTasks, setAllTasks] = useState([]);
@@ -194,80 +195,82 @@ function Table() {
     setTaskId(task.taskId);
   }
 
- async function handleDelete(task) {
-  console.log(task, 'task inside handleDelete');
-  
-  try {
-    // Validate taskId
-    if (!task.taskId) {
-      console.error("No taskId provided for deletion.");
-      toast.error("Invalid task.");
-      return;
-    }
+  async function handleDelete(task) {
+    console.log(task, "task inside handleDelete");
 
-    // Fetch all records for the user
-    const { data, error: fetchError } = await supabase
-      .from("grouped_tasks")
-      .select("tasks, id")
-      .eq("userId", userId);
-
-    if (fetchError) {
-      console.error("Failed to fetch tasks:", fetchError);
-      toast.error("Failed to fetch tasks.");
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      console.error("No tasks found for the user.");
-      toast.error("No tasks found.");
-      return;
-    }
-
-    // Find the record containing the task with the matching taskId
-    let updatedRecord = null;
-    let recordId = null;
-
-    for (const record of data) {
-      const taskIndex = record.tasks.findIndex((t) => t.taskId === task.taskId);
-      if (taskIndex !== -1) {
-        // Found the record and task
-        updatedRecord = {
-          ...record,
-          tasks: record.tasks.filter((_, index) => index !== taskIndex),
-        };
-        recordId = record.id;
-        break;
+    try {
+      // Validate taskId
+      if (!task.taskId) {
+        console.error("No taskId provided for deletion.");
+        toast.error("Invalid task.");
+        return;
       }
+
+      // Fetch all records for the user
+      const { data, error: fetchError } = await supabase
+        .from("grouped_tasks")
+        .select("tasks, id")
+        .eq("userId", userId);
+
+      if (fetchError) {
+        console.error("Failed to fetch tasks:", fetchError);
+        toast.error("Failed to fetch tasks.");
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.error("No tasks found for the user.");
+        toast.error("No tasks found.");
+        return;
+      }
+
+      // Find the record containing the task with the matching taskId
+      let updatedRecord = null;
+      let recordId = null;
+
+      for (const record of data) {
+        const taskIndex = record.tasks.findIndex(
+          (t) => t.taskId === task.taskId
+        );
+        if (taskIndex !== -1) {
+          // Found the record and task
+          updatedRecord = {
+            ...record,
+            tasks: record.tasks.filter((_, index) => index !== taskIndex),
+          };
+          recordId = record.id;
+          break;
+        }
+      }
+
+      if (!updatedRecord) {
+        console.error("Task with taskId not found:", task.taskId);
+        toast.error("Task not found.");
+        return;
+      }
+
+      // Update the specific record in Supabase
+      const { error: updateError } = await supabase
+        .from("grouped_tasks")
+        .update({ tasks: updatedRecord.tasks })
+        .eq("id", recordId);
+
+      if (updateError) {
+        console.error("Failed to delete task:", updateError);
+        toast.error("Failed to delete task.");
+        return;
+      }
+
+      // Refresh the task list
+      await getAllTasks();
+
+      // Show success message
+      toast.success("Task deleted successfully!");
+    } catch (error) {
+      console.error("Error in handleDelete:", error);
+      toast.error("An unexpected error occurred.");
     }
-
-    if (!updatedRecord) {
-      console.error("Task with taskId not found:", task.taskId);
-      toast.error("Task not found.");
-      return;
-    }
-
-    // Update the specific record in Supabase
-    const { error: updateError } = await supabase
-      .from("grouped_tasks")
-      .update({ tasks: updatedRecord.tasks })
-      .eq("id", recordId);
-
-    if (updateError) {
-      console.error("Failed to delete task:", updateError);
-      toast.error("Failed to delete task.");
-      return;
-    }
-
-    // Refresh the task list
-    await getAllTasks();
-
-    // Show success message
-    toast.success("Task deleted successfully!");
-  } catch (error) {
-    console.error("Error in handleDelete:", error);
-    toast.error("An unexpected error occurred.");
   }
-}
 
   async function handleUpdate() {
     try {
@@ -357,23 +360,23 @@ function Table() {
   }
 
   const formatReminderDateTime = (dateTimeStr) => {
-  if (!dateTimeStr) return "";
-  const [datePart, timePart] = dateTimeStr.split(" ");
-  const date = new Date(datePart + "T" + timePart);
+    if (!dateTimeStr) return "";
+    const [datePart, timePart] = dateTimeStr.split(" ");
+    const date = new Date(datePart + "T" + timePart);
 
-  const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "long" });
-  const suffix =
-    day % 10 === 1 && day !== 11
-      ? "st"
-      : day % 10 === 2 && day !== 12
-      ? "nd"
-      : day % 10 === 3 && day !== 13
-      ? "rd"
-      : "th";
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const suffix =
+      day % 10 === 1 && day !== 11
+        ? "st"
+        : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+        ? "rd"
+        : "th";
 
-  return `once on ${day}${suffix} ${month} at ${timePart}`;
-};
+    return `once on ${day}${suffix} ${month} at ${timePart}`;
+  };
 
   return (
     <>
@@ -552,13 +555,17 @@ function Table() {
 
                                     <td style={{ minWidth: "150px" }}>
                                       {task.started_at
-                                        ? new Date(
-                                            task.started_at
-                                          ).toLocaleString()
+                                        ? moment(
+                                            task.started_at,
+                                            "DD-MM-YYYY HH:mm"
+                                          ).format("DD/MM/YYYY h:mm:ss A")
                                         : "No start time"}
                                     </td>
                                     <td style={{ minWidth: "150px" }}>
-                                      {new Date(task.due_date).toLocaleString()}
+                                      {moment(
+                                        task.due_date,
+                                        "DD-MM-YYYY HH:mm"
+                                      ).format("DD/MM/YYYY h:mm:ss A")}
                                     </td>
                                     <td>
                                       <label className="toggle-switch">
@@ -579,7 +586,13 @@ function Table() {
                                         <span className="slider"></span>
                                       </label>
                                     </td>
-                                    <td>{task.reminder_type === "recurring" ? task.reminder_frequency : formatReminderDateTime(task.reminderDateTime)}</td>
+                                    <td>
+                                      {task.reminder_type === "recurring"
+                                        ? task.reminder_frequency
+                                        : formatReminderDateTime(
+                                            task.reminderDateTime
+                                          )}
+                                    </td>
 
                                     <td className="table-cell icons">
                                       <div
