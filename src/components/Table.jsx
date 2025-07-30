@@ -360,22 +360,25 @@ function Table() {
   }
 
   const formatReminderDateTime = (dateTimeStr) => {
-    if (!dateTimeStr) return "";
-    const [datePart, timePart] = dateTimeStr.split(" ");
-    const date = new Date(datePart + "T" + timePart);
+   if (!dateTimeStr) return "";
 
-    const day = date.getDate();
-    const month = date.toLocaleString("default", { month: "long" });
-    const suffix =
-      day % 10 === 1 && day !== 11
-        ? "st"
-        : day % 10 === 2 && day !== 12
-        ? "nd"
-        : day % 10 === 3 && day !== 13
-        ? "rd"
-        : "th";
+  const date = moment(dateTimeStr, "DD-MM-YYYY HH:mm");
+  if (!date.isValid()) return "";
 
-    return `once on ${day}${suffix} ${month} at ${timePart}`;
+  const day = date.date();
+  const month = date.format("MMMM");
+  const timePart = date.format("HH:mm");
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+      ? "nd"
+      : day % 10 === 3 && day !== 13
+      ? "rd"
+      : "th";
+
+  return `once on ${day}${suffix} ${month} at ${timePart}`;
   };
 
   return (
