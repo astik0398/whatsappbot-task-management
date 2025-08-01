@@ -8,6 +8,10 @@ import noentriestransparent from "../assets/noentry.png";
 import whatsapplight from "../assets/whatsapplight.svg";
 import actionEdit from "../assets/editIcon.svg";
 import actionDelete from "../assets/deleteIcon.svg";
+import editLight from '../assets/editlight.svg'
+import deleteLight from '../assets/deletelight.svg'
+import whatsappLight from '../assets/whatsapplight.svg'
+
 import moment from "moment";
 
 function Table() {
@@ -471,7 +475,7 @@ function Table() {
                       <img
                         onClick={() => handleWhatsappClick(user.phone)}
                         style={{ width: "20px" }}
-                        src={whatsapp}
+                        src={isDarkMode ? whatsappLight :  whatsapp}
                         alt=""
                       />
                     </td>
@@ -486,7 +490,7 @@ function Table() {
                             No tasks with details available
                           </p>
                         ) : (
-                          <table className="nested-table">
+                          <table className="nested-table" style={{backgroundColor:'transparent'}}>
                             <thead>
                               <tr>
                                 <th style={{ textAlign: "center" }}>
@@ -609,7 +613,7 @@ function Table() {
                                       >
                                         <span>
                                           <img
-                                            src={actionEdit}
+                                            src={isDarkMode ? editLight : actionEdit}
                                             style={{ width: "20px" }}
                                             onClick={() => handleEdit(task)}
                                             alt=""
@@ -617,7 +621,7 @@ function Table() {
                                         </span>{" "}
                                         <span>
                                           <img
-                                            src={actionDelete}
+                                            src={isDarkMode ? deleteLight : actionDelete}
                                             style={{ width: "20px" }}
                                             onClick={() => handleDelete(task)}
                                             alt=""

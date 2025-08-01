@@ -35,12 +35,20 @@
     font-size: 1.6rem;
     color: #444;
   }
+
+    .card.dark h3 {
+    color: #e2e2e2;
+  }
   
   .card p {
     margin-top: 0;
     font-size: 2.5rem;
     font-weight: bold;
     color: #2c3e50;
+  }
+
+    .card.dark p {
+    color: #e2e2e2;
   }
   
   .card:hover {

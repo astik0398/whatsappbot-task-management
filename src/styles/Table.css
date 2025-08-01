@@ -259,10 +259,6 @@
   cursor: pointer;
 }
 
-.table tr:hover {
-  background-color: #f1f1f1;
-}
-
 /* Collapsible row */
 .nested-table {
   width: 100%;
@@ -285,10 +281,6 @@ th, td{
 .nested-table th {
   background-color: #e9e9e9;
   color: #444;
-}
-
-.nested-table tr:hover {
-  background-color: #f9f9f9;
 }
 
 .search-input{

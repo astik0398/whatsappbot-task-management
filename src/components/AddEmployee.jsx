@@ -112,7 +112,7 @@ console.log('inside handle sumit function');
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Add Employee</h2>
+            <h2 style={{color:'#2c3e50'}}>Add Employee</h2>
             <input
               type="text"
               name="name"

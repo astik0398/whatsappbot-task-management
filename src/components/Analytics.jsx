@@ -131,7 +131,7 @@ data.forEach((item)=> {
         </div>
 
         <div className={`card ${isDarkMode ? 'dark' : ''} progress-bar`}>
-          <CircularProgressBar percentage={completionPercentage} taskCount={totalTasks} color={progressColor}/>
+          <CircularProgressBar percentage={completionPercentage} taskCount={totalTasks} color={progressColor} isDarkMode={isDarkMode}/>
           </div>
       </div>
       {/* <ToastContainer autoClose={2000}/> */}
