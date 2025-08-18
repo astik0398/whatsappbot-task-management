@@ -11,6 +11,8 @@ import Settings from "./Settings";
 import { FaSun, FaMoon } from "react-icons/fa"; // at the top of your file
 import Analytics from "./Analytics";
 import analyticsIcon from '../assets/analytics.svg'
+import meeting from '../assets/meeting.svg'
+import Meetings from "./Meetings";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("Dashboard");
@@ -111,6 +113,16 @@ const Dashboard = () => {
             <img width={"20px"} src={entriesIcon} alt="" />
             <p>All Tasks</p>
           </li>
+           <li
+            className={activeSection === "Meetings" ? "active" : ""}
+            onClick={() => {
+              setActiveSection("Meetings");
+              setShowUpload(false);
+            }}
+          >
+            <img width={"20px"} src={meeting} alt="" />
+            <p>All Meetings</p>
+          </li>
           <li
             className={activeSection === "Settings" ? "active" : ""}
             onClick={() => {
@@ -173,6 +185,12 @@ const Dashboard = () => {
         {activeSection === "Settings" && (
           <div>
             <Settings />
+          </div>
+        )}
+
+         {activeSection === "Meetings" && (
+          <div>
+            <Meetings />
           </div>
         )}
       </div>
