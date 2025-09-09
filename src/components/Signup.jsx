@@ -49,9 +49,26 @@ function Signup() {
     });
     
     const user = data?.user;
-    console.log(user);    
-    
+   
+    if (user) {
+  const { data: userDetails, error: insertError } = await supabase
+    .from("user_details")
+    .insert([
+      {
+        userId: user.id,   // auth user id
+        phone: `whatsapp:+${phoneNumber}`, // custom column
+        email: user.email,
+        full_name: user.user_metadata.first_name + " " + user.user_metadata.last_name
+      }
+    ]);
 
+  if (insertError) {
+    console.error("Error inserting into user_details:", insertError);
+  } else {
+    console.log("Inserted into user_details:", userDetails);
+  }
+} 
+    
     if (error) {
       toast.error(error.message);
       console.error(error);

@@ -496,7 +496,7 @@ function Table() {
                                 <th style={{ textAlign: "center" }}>
                                   Task Details
                                 </th>
-                                {hasNotes && <th>Notes</th>}
+                                {hasNotes && <th style={{width:'150px'}}>Notes</th>}
                                 <th>Status</th>
                                 <th>Reason</th>
                                 <th>Started At</th>
@@ -520,19 +520,23 @@ function Table() {
                                         {task.notes &&
                                         typeof task.notes === "object" ? (
                                           <>
+                                          <p>Customer Name: <b>{task.notes.customer_name}</b></p>
                                             Order ID:{" "}
                                             {task.notes.order_id ?? "N/A"}{" "}
                                             <br />
                                             Handled By:{" "}
-                                            {task.notes.handled_by ??
-                                              "N/A"}{" "}
+                                            <b>{task.notes.handled_by ??
+                                              "N/A"}{" "}</b>
                                             <br />
                                             Bakery Location:{" "}
                                             {task.notes.bakery_location ??
                                               "N/A"}{" "}
                                             <br />
-                                            Payment Mode:{" "}
-                                            {task.notes.payment_mode ?? "N/A"}
+<p>                                            <b>Payment Summary: <br /></b>
+</p>
+                                            {`${task.notes.payment_summary.mode} : ${task.notes.payment_summary.amount}` ?? "N/A"}
+                                          <br />
+                                                Balance: <span className="font-medium">{task.notes.payment_summary.balance}</span>
                                           </>
                                         ) : (
                                           task.notes
