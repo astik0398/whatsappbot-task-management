@@ -7,7 +7,6 @@ body {
 /* Dashboard Layout */
 .dashboard {
   display: flex;
-  height: 100vh;
 }
 
 /* Sidebar */
@@ -18,6 +17,7 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  height: 100vh; /* full viewport height */
 }
 
 .logo {
@@ -72,20 +72,177 @@ body {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.logout-btn{
-  background-color:#f44336;
-
-   /* color: 'white',              
-  padding: '8px 20px',
-  border: 'none',        
-  borderRadius: '5px',         
-  cursor: 'pointer', 
-  fontSize: '16px', 
-  fontWeight: 'bold', 
-  transition: 'background-color 0.3s',
-  outline: 'none', */
+/* --- Logout button --- */
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  outline: none;
 }
 
-.logout-btn:hover{
+.logout-btn:hover {
   background-color: #d32f2f;
+}
+
+/* --- Topbar Layout --- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  background-color: #1e293b;
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* --- Burger Icon --- */
+.burger-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #ff0000;
+  z-index: 1100;
+}
+
+.name-initials-div{
+margin: -12px 0px;
+              display: flex;
+              justify-content: end;
+              align-items: center;
+              gap: 10px;
+}
+
+.mobile-logout {
+  display: none;
+  margin-top: auto; /* push to bottom */
+  text-align: center;
+}
+
+/* Hide desktop logout on small screens */
+.desktop-only {
+  display: inline-block;
+}
+
+/* --- Mobile Sidebar --- */
+@media (max-width: 768px) {
+
+ .name-initials-div {
+    margin-left: 60px; /* shift right to avoid overlap with hamburger */
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; 
+    height: 100%;
+    width: 250px;
+    background-color: #1e293b;
+    color: white;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;  /* slide in */
+  }
+
+  .burger-icon {
+    display: block;
+    font-size: 26px;
+    cursor: pointer;
+    color: #ff0000;
+    z-index: 2000; /* higher than sidebar */
+
+    /* Smooth transition for movement & opacity */
+
+    position: fixed;
+    top: 20px;
+    left: 20px; /* default when sidebar is closed */
+    transition: left 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  /* Overlay when sidebar is open */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 900;
+  }
+
+   .sidebar.open + .content .burger-icon,
+  .burger-icon.active {
+    position: fixed;
+    top: 20px;
+      left: 240px; /* same as sidebar width */
+    transform: translateX(10px); /* small gap between sidebar & cross */
+        opacity: 1;
+
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-logout {
+    display: block;
+    padding: 20px 0;
+  }
+
+  .mobile-logout .logout-btn {
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+  }
+
+   .mobile-logout .logout-btn {
+    background-color: transparent;  /* remove background */
+    border: 2px solid #f44336;      /* red border */
+    color: #f44336;                 /* red text */
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    font-weight: bold;
+  }
+
+  .mobile-logout .logout-btn:hover {
+    color: #fff;
+  }
+
+   .mobile-logout {
+    display: block;
+    padding: 20px 0;
+    margin-top: auto;
+    margin-bottom: 50px; /* 👈 lift it up */
+    text-align: center;
+  }
 }

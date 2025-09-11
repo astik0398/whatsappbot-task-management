@@ -48,46 +48,56 @@ function Login() {
   }
 
   return (
-    <div style={{display:'flex', gap:'220px'}}>
-        <div style={{backgroundColor:'#1e293b', height:'100vh', width:'40%', color:'white', display:'flex', flexDirection:'column', justifyContent:'center'}}>
-            <h1 style={{color:'#f39c12'}}>WELCOME BACK!</h1>
-        <h1 style={{marginTop:'0px', fontSize:'35px', letterSpacing:'4px'}}>TASK MANAGEMENT</h1>
-        <p style={{marginTop:'0px', fontSize:'20px', letterSpacing:'2px'}}>Manage all your tasks at one place!</p>
-        </div>
-        <div>
+     <div className="login-page">
+      <div className="login-left">
+        <h1 className="highlight">WELCOME BACK!</h1>
+        <h1 id='title-text' className="title">TASK MANAGEMENT</h1>
+        <p className="subtitle">Manage all your tasks at one place!</p>
+      </div>
+      <div  className='login-wrapper'>
         <form onSubmit={handleLogin} className="login-div">
-      <div>
-        <label>Email</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Enter your email'/>
+          <div>
+            <label>Email</label>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div className="password-wrapper">
+            <label>Password</label>
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+            />
+            <span className="password-toggle" onClick={handleTogglePassword}>
+              {showPassword ? <FaEyeSlash color="grey" /> : <FaEye color="grey" />}
+            </span>
+          </div>
+          <div className="login-links">
+            <label>
+              <Link
+                className="forgot-password-label"
+                target="blank"
+                to="/forgot-password"
+              >
+                Forgot Password?
+              </Link>
+            </label>
+            <label>
+              Are you a new user?{" "}
+              <Link className="newuser-label" to="/register">
+                Signup
+              </Link>
+            </label>
+          </div>
+          <button type="submit">Login</button>
+        </form>
       </div>
-      <div style={{ position: "relative" }}>
-        <label>Password</label>
-        <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} placeholder='Enter your password'/>
-        <span
-                  onClick={handleTogglePassword}
-                  style={{
-                    position: "absolute",
-                    right: "20px",
-                    top: "60%",
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                  }}
-                >
-                  {showPassword ? <FaEyeSlash color='grey'/> : <FaEye color='grey'/>}
-                </span>
-      </div>
-     <div style={{display:'flex', flexDirection:'row-reverse', justifyContent:'space-between'}}>
-     <label>
-  <Link className="forgot-password-label" target='blank' to="/forgot-password">Forgot Password?</Link>
-</label>
-      <label>
-        Are you a new user? <Link className="newuser-label" to="/register">Signup</Link>
-      </label>
-     </div>
-      <button type="submit">Login</button>
-    </form>
-        </div>
-        <ToastContainer autoClose={2000}/>
+      <ToastContainer autoClose={2000} />
     </div>
   );
 }

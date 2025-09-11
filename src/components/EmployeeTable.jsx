@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../supabaseClient";
-import "../styles/Table.css"; // External CSS file
 import axios from "axios";
 import whatsapp from "../assets/whatsapp.svg";
 import editIcon from '../assets/editIcon.svg'
@@ -11,6 +10,7 @@ import whatsapplight from '../assets/whatsapplight.svg'
 import editlight from '../assets/editlight.svg'
 import deletelight from '../assets/deletelight.svg'
 import PhoneInput from "react-phone-input-2";
+import '../styles/EmployeeTable.css'
 
 function EmployeeTable({flag, setFlag}) {
   const [allTasks, setAllTasks] = useState([]);
@@ -135,13 +135,13 @@ function EmployeeTable({flag, setFlag}) {
   return (
     <>
       
-      <div style={{display:'flex', gap:'15px', marginLeft:'120px', marginBottom:'20px'}}>
+      <div  className="search-container">
       <input className="search-input" type="text" name="" id="" placeholder="Search Employee" onChange={(e)=> setSearchText(e.target.value)}/>
       </div>
     {filteredTasks.length > 0 ? <div>
 
-      <div style={{maxHeight: '450px', overflowY:'auto',  margin:'auto'}}>
-      <table style={{width:'80%', marginTop:'0px'}} className="table">
+      <div  className="table-wrapper">
+      <table className="table">
         <thead style={{color:'red'}}>
           <tr >
             <th style={{textAlign:'center'}} className="table-header">NAME</th>
@@ -168,110 +168,33 @@ function EmployeeTable({flag, setFlag}) {
       </table>
       </div>
 
-      {showModal && <div className="modal-overlay" style={{
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: '1000'
-  }}>
-  <div className="modal" style={{
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    width: '500px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }}>
-    <h2 style={{
-      fontSize: '18px',
-      marginBottom: '20px',
-      color: '#333'
-    }}>Update Details</h2>
-    
-    <input
-      type="text"
-      name="name"
-      placeholder="Enter Name"
-      style={{
-        padding: '10px',
-        marginBottom: '10px',
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        boxSizing: 'border-box'
-      }}
-      value={name}
-      onChange={(e)=> setName(e.target.value)}
-    />
-    
-    {/* <input
-      type="number"
-      name="phone"
-      placeholder="Enter Phone Number"
-      style={{
-        padding: '10px',
-        marginBottom: '20px',
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        boxSizing: 'border-box'
-      }}
-      value={phoneNumber}
-      onChange={(e)=> setPhoneNumber(e.target.value)}
-    /> */}
-    
-     <PhoneInput
-            country="in"  // Default country
-            value={phoneNumber}
-            onChange={(e)=> setPhoneNumber(e)}
-          />
-
-    <div className="btn-div" style={{
-      display: 'flex',
-      justifyContent: 'end',
-      width: '100%',
-      alignItems: 'center'
-    }}>
-      <button className="button-save" style={{
-        padding: '10px 20px',
-        backgroundColor: '#007bff',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        width: '45%'
-      }}
-      onClick={handleUpdate}
-      >
-        Update
-      </button>
-      
-      <span
-        onClick={() => setShowModal(false)}
-        className="modal-close"
-        style={{
-          fontSize: '24px',
-          cursor: 'pointer',
-          color: '#999',
-          padding: '5px',
-          marginLeft: '10px'
-        }}
-      >
-        &times;
-      </span>
+    {showModal && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h2>Update Details</h2>
+      <input
+        type="text"
+        name="name"
+        placeholder="Enter Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <PhoneInput
+        country="in"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e)}
+      />
+      <div className="btn-div">
+        <button className="button-save" onClick={handleUpdate}>
+          Update
+        </button>
+        <span onClick={() => setShowModal(false)} className="modal-close">
+          &times;
+        </span>
+      </div>
     </div>
   </div>
-</div>
-}
+)}
 
     </div> : <img src={noemployee} width={'60%'}/>}
 

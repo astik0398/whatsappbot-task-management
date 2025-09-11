@@ -1,46 +1,127 @@
-  /* Style for the tab buttons (Update Password, Update Name) */
+/* Style for the tab buttons (Update Password, Update Name) */
+.tab-buttons {
+  display: flex;
+  margin: auto;
+  border: 1px solid #ccc;
+  width: fit-content;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+#btn-pass {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+#btn-name {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.tab-buttons button:last-child {
+  margin-right: 0;
+}
+
+/* Highlight the active tab */
+.tab-buttons .active {
+  background-color: #007BFF;
+  color: white;
+  border-color: #007BFF;
+}
+
+.tab-buttons button:hover {
+  background-color: #007BFF;
+  color: white;
+}
+
+/* ===================== */
+/* 📱 Tablet Responsive  */
+/* ===================== */
+@media (max-width: 1024px) {
   .tab-buttons {
-    display: flex;
-    margin: auto;
-    /* margin-bottom: 40px; */
-    border: 1px solid #ccc;
-    width: fit-content;
-    padding: 2px;
+    margin-top: 20px;
+  }
+
+  .tab-buttons button {
+    font-size: 15px;
+    padding: 8px 16px;
+  }
+
+  .reset-password-form {
+    width: 80%;
+  }
+
+  .reset-password-form input {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .reset-password-form button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
+
+/* ===================== */
+/* 📱 Mobile Responsive  */
+/* ===================== */
+@media (max-width: 640px) {
+  .tab-buttons {
+    flex-direction: column; /* stack vertically */
+    width: 90%; /* take more width */
     border-radius: 5px;
   }
-  
-  .tab-buttons button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-    border: none;
-}
 
-#btn-pass{
+  #btn-pass,
+  #btn-name {
+    border-radius: 0; /* reset border radius */
+  }
+
+  #btn-pass {
     border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-#btn-name{
     border-top-right-radius: 5px;
+  }
+
+  #btn-name {
+    border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  .tab-buttons button {
+    width: 100%; /* full width buttons */
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .reset-password-form {
+    width: 90%; /* full-width form */
+  }
+
+  .reset-password-form h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .reset-password-form input {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .reset-password-form button {
+    width: 100%; /* full-width submit button */
+    padding: 12px;
+    font-size: 15px;
+  }
 }
-  
-  .tab-buttons button:last-child {
-    margin-right: 0;
-  }
-  
-  /* Highlight the active tab */
-  .tab-buttons .active {
-    background-color: #007BFF;
-    color: white;
-    border-color: #007BFF;
-  }
-  
-  .tab-buttons button:hover {
-    background-color: #007BFF;
-    color: white;
-  }
-  

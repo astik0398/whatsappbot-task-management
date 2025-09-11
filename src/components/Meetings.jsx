@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import supabase from '../supabaseClient';
+import '../styles/Meetings.css';
 
 function Meetings() {
 
@@ -85,163 +86,42 @@ function formatMeetingTime(meeting_time, meeting_duration) {
 }
 
   return (
- <div style={{
-  fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-  maxWidth: "900px",
-  margin: "0 auto"
-}}>
-  <h2 style={{
-    fontSize: "24px",
-    fontWeight: "600",
-    color: "#1e293b",
-    marginBottom: "24px",
-    textAlign: "center"
-  }}>
-    All Meetings
-  </h2>
+  <div className="meetings-container">
+      <h2 className="meetings-title">All Meetings</h2>
 
-  {meetings.length === 0 ? (
-    <p style={{
-      color: "#6b7280",
-      fontSize: "16px",
-      textAlign: "center"
-    }}>
-      No meetings found.
-    </p>
-  ) : (
-    <ul style={{
-      listStyle: "none",
-      padding: "0",
-      margin: "0",
-      maxHeight: "80vh", // Set a maximum height for the scrollable area
-      overflowY: "auto", // Enable vertical scrolling
-      scrollbarWidth: "thin", // For Firefox
-      scrollbarColor: "#6b7280 #e5e7eb", // Custom scrollbar color
-      WebkitOverflowScrolling: "touch", // Smooth scrolling on touch devices
-      "&::-webkit-scrollbar": { // Custom scrollbar for Webkit browsers
-        width: "8px"
-      },
-      "&::-webkit-scrollbar-track": {
-        background: "#e5e7eb",
-        borderRadius: "4px"
-      },
-      "&::-webkit-scrollbar-thumb": {
-        background: "#6b7280",
-        borderRadius: "4px"
-      },
-      "&::-webkit-scrollbar-thumb:hover": {
-        background: "#4b5563"
-      }
-    }}>
-      {meetings.map((m) => (
-        <li
-          key={m.id}
-          style={{
-            backgroundColor: "#ffffffff",
-            marginBottom: "16px",
-            padding: "16px",
-            borderRadius: "10px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: "16px",
-            transition: "box-shadow 0.2s ease",
-            cursor: "default"
-          }}
-        >
-          <div style={{
-            width: "100px",
-            height: "100px",
-            backgroundColor: "#2563eb",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "8px",
-            flexShrink: 0
-          }}>
-            <span style={{
-              fontSize: "30px",
-              fontWeight: "600",
-              color: "#ffffff"
-            }}>
-              {FormatDate(m.meeting_date)}
-            </span>
-          </div>
+      {meetings.length === 0 ? (
+        <p className="meetings-empty">No meetings found.</p>
+      ) : (
+        <ul className="meetings-list">
+          {meetings.map((m) => (
+            <li key={m.id} className="meeting-item">
+              <div className="meeting-date">
+                <span>{FormatDate(m.meeting_date)}</span>
+              </div>
 
-          <div style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: "6px"
-          }}>
-            <strong style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              color: "#1e293b",
-              textAlign:'start'
-            }}>
-              {m.meeting_title}
-            </strong>
-            <span style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#4b5563",
-              fontSize: "14px"
-            }}>
-              🕒 {formatMeetingTime(m.meeting_time, m.meeting_duration)}
-            </span>
+              <div className="meeting-details">
+                <strong className="meeting-title">{m.meeting_title}</strong>
+                <span className="meeting-info">
+                  🕒 {formatMeetingTime(m.meeting_time, m.meeting_duration)}
+                </span>
+                <span className="meeting-info">
+                  🔁 Meeting Type: {m.meeting_type}
+                </span>
+                <span className="meeting-info">
+                  👥 {m.meeting_attendees?.join(", ") || "No attendees"}
+                </span>
+              </div>
 
-             <span style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#4b5563",
-              fontSize: "14px"
-            }}>
-             🔁 Meeting Type: {m.meeting_type}
-            </span>
-            
-            <span style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#4b5563",
-              fontSize: "14px"
-            }}>
-              👥 {m.meeting_attendees?.join(", ") || "No attendees"}
-            </span>
-
-            
-          </div>
-
-          <div style={{
-            flexShrink: 0
-          }}>
-            <a
-              href={m.meeting_link}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: "inline-block",
-                padding: "15px 18px",
-                marginTop:'25px',
-                backgroundColor: "#22c55e",
-                color: "#ffffff",
-                fontWeight: "600",
-                fontSize: "14px",
-                textDecoration: "none",
-                borderRadius: "8px",
-                border: "none",
-                transition: "background-color 0.2s ease, box-shadow 0.2s ease",
-                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)"
-              }}
-                          >
-              Join Meeting
-            </a>
-          </div>
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
+              <div className="meeting-link">
+                <a href={m.meeting_link} target="_blank" rel="noreferrer">
+                  Join Meeting
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 

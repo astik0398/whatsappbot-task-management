@@ -1,73 +1,9 @@
-/* Hide the default radio button */
+/* Hide the default checkbox */
 .toggle-switch input[type="checkbox"] {
-    display: none;
-  }
-  
-  /* Create the custom toggle switch */
-  .toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 20px;
-  }
-  
-  .toggle-switch .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 34px;
-  }
-  
-  .toggle-switch .slider:before {
-    position: absolute;
-    content: "";
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    left: 3px;
-    bottom: 3px;
-    background-color: rgb(255, 255, 255);
-    transition: 0.4s;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .slider {
-    background-color: #4CAF50;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .slider:before {
-    transform: translateX(30px);
-  }
-  
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.1);
-  margin: auto;
-  margin-top: 50px;
+  display: none;
 }
 
-/* Table headers */
-.table-header {
-  background-color: #334155;
-  color: white;
-  padding: 12px 15px;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Table cells */
-.table-cell {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-/* Toggle switch */
+/* Custom toggle switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -75,13 +11,7 @@
   height: 20px;
 }
 
-.toggle-input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
+.toggle-switch .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -90,27 +20,82 @@
   bottom: 0;
   background-color: #ccc;
   transition: 0.4s;
-  border-radius: 20px;
+  border-radius: 34px;
 }
 
-.toggle-input:checked + .slider {
+.toggle-switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .slider {
   background-color: #4CAF50;
 }
 
-.slider::before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 54px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
+.toggle-switch input[type="checkbox"]:checked + .slider:before {
+  transform: translateX(30px);
 }
 
-.toggle-input:checked + .slider::before {
-  transform: translateX(14px);
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  color: #334155;
+  font-weight: bold;
+}
+
+.table tr {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+/* Nested table */
+.nested-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fafafa;
+  margin-top: 0.5rem;
+}
+
+.nested-table th,
+.nested-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.nested-table th {
+  background-color: #e9e9e9;
+  color: #444;
+}
+
+/* Scrollable table wrapper */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* WhatsApp Icon */
@@ -124,186 +109,44 @@
   cursor: pointer;
 }
 
-::-webkit-scrollbar{
+/* Scrollbar */
+::-webkit-scrollbar {
   width: 4px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: #334155;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-track{
-  background-color: white;
+::-webkit-scrollbar-track {
+  background-color: #fff;
 }
 
-.search-input{
-  width: 30%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.search-button{
-  font-size: 14px;
-  padding: 4px 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  background-color:#007bff;
-  color: white;
-}
-
-.tab-buttons {
-  display: flex;
-  margin: auto;
-  border: 1px solid #ccc;
-  width: fit-content;
-  padding: 2px;
-  border-radius: 5px;
-  gap: 0px;
-}
-
-.tab-buttons button {
-  padding: 10px 25px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #f9f9f9;
-  transition: background-color 0.3s ease;
-  border: none;
-  color: black;
-}
-
-#btn-all{
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-#btn-pending{
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-left: 0;
-}
-
-#btn-incomplete{
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-left: 0;
-
-}
-
-#btn-completed{
-
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.tab-buttons button:last-child {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-.tab-buttons button:first-child {
-  margin-left: 0;
-}
-
-/* Highlight the active tab */
-.tab-buttons .active {
-  background-color: #007BFF;
-  color: white;
-  border-color: #007BFF;
-}
-
-.tab-buttons button:hover {
-  background-color: #007BFF;
-  color: white;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.table th, .table td {
-  border: 1px solid #ddd;
+/* Search box */
+.search-input {
+  width: 400px;
   padding: 12px;
-  text-align: left;
-}
-
-.table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-  color: #333;
-}
-
-.table tr {
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-}
-
-/* Collapsible row */
-.nested-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fafafa;
-  margin-top: 0.5rem;
-}
-
-.nested-table th, .nested-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  font-size: 14px;
-  text-align: center;
-}
-
-th, td{
-  text-align: center;
-}
-
-.nested-table th {
-  background-color: #e9e9e9;
-  color: #444;
-}
-
-.search-input{
-  width: 30%;
-  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-right: 350px;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.search-button{
+.search-button {
   font-size: 14px;
   padding: 4px 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
-  background-color:#007bff;
-  color: white;
+  background-color: #007bff;
+  color: #fff;
 }
 
+/* Tabs */
 .tab-buttons {
   display: flex;
   margin: auto;
@@ -324,70 +167,159 @@ th, td{
   color: black;
 }
 
-#btn-all{
+#btn-all {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
 }
 
-#btn-pending{
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-left: 0;
-}
-
-#btn-incomplete{
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-left: 0;
-
-}
-
-#btn-completed{
-
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
+#btn-completed {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
-.tab-buttons button:last-child {
-  margin-right: 0;
-  margin-left: 0;
-}
-
-.tab-buttons button:first-child {
-  margin-left: 0;
-}
-
-/* Highlight the active tab */
 .tab-buttons .active {
-  background-color: #007BFF;
-  color: white;
-  border-color: #007BFF;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .tab-buttons button:hover {
-  background-color: #007BFF;
-  color: white;
+  background-color: #007bff;
+  color: #fff;
 }
 
-/* Optional: Make it responsive */
-@media (max-width: 768px) {
-  .table, .nested-table {
+/* Controls wrapper (tabs + search) */
+.controls-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 20px;
+}
+
+/* toggle switch for board view/table view */
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #333; /* Adjust based on theme */
+  margin-right: 30px;
+  width: 20%;
+}
+
+.view-label {
+  font-size: small;
+}
+
+/* View Toggle Switch Styles */
+.view-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.view-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.view-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.view-slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 18px;
+  left: 2px;
+  bottom: 3px;
+  background-color: rgb(255, 255, 255);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.view-toggle-input:checked + .view-slider {
+  background-color: #2196F3;
+}
+
+.view-toggle-input:checked + .view-slider:before {
+  transform: translateX(26px);
+}
+
+/* Tablet adjustments */
+@media (max-width: 991px) {
+  .controls-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    width: 70% !important;
+    margin: 0 auto;
+  }
+
+  .table,
+  .nested-table {
+    font-size: 13px;
+  }
+
+  .table th,
+  .table td,
+  .nested-table th,
+  .nested-table td {
+    padding: 8px;
+  }
+}
+
+/* Mobile fine-tuning */
+@media (max-width: 600px) {
+
+    .tab-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 per row */
+    gap: 8px;
+    width: 100%;
+  }
+
+  .tab-buttons button {
+    width: 50%;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .search-input {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+
+  .table,
+  .nested-table {
     font-size: 12px;
   }
 
-  .table th, .table td, .nested-table th, .nested-table td {
-    padding: 8px;
+  .table th,
+  .table td,
+  .nested-table th,
+  .nested-table td {
+    padding: 6px;
   }
 }

@@ -27,6 +27,15 @@ function Table() {
   const [taskDetails, setTaskDetails] = useState("");
   const [note, setNote] = useState("");
   const [taskId, setTaskId] = useState("");
+    const [isTableView, setIsTableView] = useState(true); // default: Table view
+
+      const handleToggle = () => {
+    setIsTableView((prev) => {
+      const newValue = !prev;
+      console.log(newValue ? "TABLE" : "BOARD");
+      return newValue;
+    });
+  };
 
   const toggleRow = (index) => {
     setExpandedRows((prev) =>
@@ -390,6 +399,7 @@ function Table() {
   return (
     <>
       <div
+      className="controls-container"
         style={{
           display: "flex",
           alignItems: "center",
@@ -426,24 +436,35 @@ function Table() {
           </button>
         </div>
 
-        <input
+       <div>
+         <input
           type="text"
           placeholder="Search tasks..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            padding: "12px",
-            width: "400px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            marginRight: "350px",
-          }}
+            className="search-input"
         />
+       </div>
+
+        <div className="view-toggle">
+          <span className="view-label">Board View</span>
+          <label className="view-toggle-switch">
+            <input
+              type="checkbox"
+              className="view-toggle-input"
+              checked={isTableView} // Default to Table View
+              onChange={handleToggle}
+            />
+            <span className="view-slider"></span>
+          </label>
+          <span className="view-label">Table View</span>
+        </div>
       </div>
 
       <div style={{ height: "600px", overflowY: "auto", marginTop: "10px" }}>
         {filteredTasks.length > 0 ? (
-          <table className="table">
+         <div className="table-container">
+           <table className="table">
             <thead>
               <tr>
                 <th style={{ textAlign: "center" }}>ID</th>
@@ -645,6 +666,7 @@ function Table() {
               ))}
             </tbody>
           </table>
+         </div>
         ) : (
           <img
             style={{ marginTop: "15vh" }}

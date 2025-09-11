@@ -8,7 +8,7 @@ import AddEmployee from "./AddEmployee";
 import { useNavigate } from "react-router-dom";
 import settings from '../assets/settings.svg'
 import Settings from "./Settings";
-import { FaSun, FaMoon } from "react-icons/fa"; // at the top of your file
+import {FaBars, FaTimes, FaSun, FaMoon } from "react-icons/fa"; // at the top of your file
 import Analytics from "./Analytics";
 import analyticsIcon from '../assets/analytics.svg'
 import meeting from '../assets/meeting.svg'
@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [isUploaded, setIsUploaded] = useState(false)
   const [theme, setTheme] = useState('light'); // 'light' or 'dark'
   const [name, setName] = useState('')
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // NEW
   const navigate = useNavigate()
   
   const dummyAnalyticsData = {
@@ -77,17 +78,20 @@ const Dashboard = () => {
   
 
   return (
-    <div className="dashboard">
-    
-      <div className="sidebar">
+      <div className="dashboard">
+      {/* Sidebar */}
+      <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <h2 className="logo">TASK MANAGER</h2>
-        <span style={{marginTop:'-10px'}}>{`(+${localStorage.getItem('employer_number')})`}</span>
+        <span style={{ marginTop: "-10px" }}>
+          {`(+${localStorage.getItem("employer_number")})`}
+        </span>
         <ul>
-        <li
+          <li
             className={activeSection === "Dashboard" ? "active" : ""}
             onClick={() => {
               setActiveSection("Dashboard");
               setShowUpload(false);
+              setIsSidebarOpen(false); // close sidebar after selection
             }}
           >
             <img width={"20px"} src={analyticsIcon} alt="" />
@@ -98,6 +102,7 @@ const Dashboard = () => {
             onClick={() => {
               setActiveSection("Employees");
               setShowUpload(false);
+              setIsSidebarOpen(false);
             }}
           >
             <img width={"20px"} src={employeesIcon} alt="" />
@@ -108,16 +113,18 @@ const Dashboard = () => {
             onClick={() => {
               setActiveSection("Entries");
               setShowUpload(false);
+              setIsSidebarOpen(false);
             }}
           >
             <img width={"20px"} src={entriesIcon} alt="" />
             <p>All Tasks</p>
           </li>
-           <li
+          <li
             className={activeSection === "Meetings" ? "active" : ""}
             onClick={() => {
               setActiveSection("Meetings");
               setShowUpload(false);
+              setIsSidebarOpen(false);
             }}
           >
             <img width={"20px"} src={meeting} alt="" />
@@ -128,71 +135,97 @@ const Dashboard = () => {
             onClick={() => {
               setActiveSection("Settings");
               setShowUpload(false);
+              setIsSidebarOpen(false);
             }}
           >
             <img width={"20px"} src={settings} alt="" />
             <p>Settings</p>
           </li>
         </ul>
+
+          <div className="mobile-logout">
+    <button className="logout-btn" onClick={handleLogout}>
+      Log out
+    </button>
+  </div>
       </div>
 
+      {/* Content */}
       <div className={`content ${theme}`}>
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-          <div style={{margin:'-12px 0px', display:'flex', justifyContent:'end', alignItems:'center', gap:'10px'}}>
-          <h3>Hello! {getFirstName(name)}</h3>
-          <span style={{backgroundColor:'#1e293b', color:'white', padding:'8px', borderRadius:'50%', width:'20px', height:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>{getNameInitials(name)}</span>
+        {/* Top bar */}
+        <div
+        className="topbar"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {/* Burger icon only on mobile */}
+          <div className={`burger-icon ${isSidebarOpen ? "active" : ""}`} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </div>
 
-          <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'50px'}}>
-          <div onClick={toggleTheme} className="theme-toggle" style={{ cursor: 'pointer', fontSize: '24px', display:'flex' }}>
-  {theme === 'light' ? <FaMoon /> : <FaSun color="yellow" />}
-</div>
+          <div
+           
+            className="name-initials-div"
+          >
+            <h3>Hello! {getFirstName(name)}</h3>
+            <span
+              style={{
+                backgroundColor: "#1e293b",
+                color: "white",
+                padding: "8px",
+                borderRadius: "50%",
+                width: "20px",
+                height: "20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {getNameInitials(name)}
+            </span>
+          </div>
 
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "50px",
+            }}
+          >
+            <div
+              onClick={toggleTheme}
+              className="theme-toggle"
+              style={{ cursor: "pointer", fontSize: "24px", display: "flex" }}
+            >
+              {theme === "light" ? <FaMoon /> : <FaSun color="yellow" />}
+            </div>
 
-            <button className="logout-btn" onClick={handleLogout} style={{
-  color: 'white',              
-  padding: '8px 20px',
-  border: 'none',        
-  borderRadius: '5px',         
-  cursor: 'pointer', 
-  fontSize: '16px', 
-  fontWeight: 'bold', 
-  transition: 'background-color 0.3s',
-  outline: 'none',
-}}>Log out</button></div>
+            <button className="logout-btn desktop-only" onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
         </div>
-        <hr style={{marginBottom:'20px', border:'0', height:'1px', backgroundColor:'#ccc'}}/>
 
-        {activeSection === "Dashboard" && (
-          <div>
-            <Analytics data={dummyAnalyticsData}/>
-          </div>
-        )}
-        {activeSection === "Employees" && (
-          <div>
-            {showUpload ? (
-              isUploaded ? <Table/> : <UploadFile setIsUploaded={setIsUploaded}/>
-            ) : (
-              <AddEmployee setShowUpload={setShowUpload} />
-            )}
-          </div>
-        )}
-        {activeSection === "Entries" && (
-          <div>
-            <Table />
-          </div>
-        )}
-        {activeSection === "Settings" && (
-          <div>
-            <Settings />
-          </div>
-        )}
+        <hr
+          style={{
+            marginBottom: "20px",
+            border: "0",
+            height: "1px",
+            backgroundColor: "#ccc",
+          }}
+        />
 
-         {activeSection === "Meetings" && (
-          <div>
-            <Meetings />
-          </div>
-        )}
+        {/* Sections */}
+        {activeSection === "Dashboard" && <Analytics data={dummyAnalyticsData} />}
+        {activeSection === "Employees" &&
+          (showUpload ? (isUploaded ? <Table /> : <UploadFile setIsUploaded={setIsUploaded} />) : <AddEmployee setShowUpload={setShowUpload} />)}
+        {activeSection === "Entries" && <Table />}
+        {activeSection === "Settings" && <Settings />}
+        {activeSection === "Meetings" && <Meetings />}
       </div>
     </div>
   );

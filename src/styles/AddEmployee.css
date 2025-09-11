@@ -1,13 +1,13 @@
 .container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 25px;
-    padding: 30px;
-    border: 4px dotted #ccc;
-    width: 50%;
-    margin: auto;
-    margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+  padding: 30px;
+  border: 4px dotted #ccc;
+  width: 50%;
+  margin: auto;
+  margin-top: 50px;
 }
 
 .or-text {
@@ -153,3 +153,55 @@ width: 95%;
   .flag-dropdown {
     background-color: rgb(222, 222, 222) !important;
   }
+
+  /* ✅ Tablet View */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column; /* stack buttons vertically */
+    width: 70%;            /* make container wider */
+    gap: 20px;
+  }
+
+  .modal {
+    width: 60%;            /* modal takes more width */
+    padding: 30px;         /* reduce padding */
+  }
+
+  .button {
+    width: 100%;           /* full width buttons */
+    font-size: 15px;
+  }
+}
+
+/* ✅ Mobile View */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    width: 90%;            /* almost full width */
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .modal {
+    width: 90%;            /* modal spans nearly full screen */
+    padding: 20px;
+  }
+
+  .modal input {
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;           /* full width */
+    font-size: 14px;
+  }
+
+  .button-save {
+    width: 100%;           /* Save button full width */
+  }
+
+  .or-text::before,
+  .or-text::after {
+    width: 30px;           /* shorter lines around OR */
+  }
+}

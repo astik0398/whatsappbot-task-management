@@ -1,55 +1,225 @@
-/* Login Page Styles */
+/* Page container */
+.login-page {
+  display: flex;
+  gap: 220px;
+}
+
+/* Left section */
+.login-left {
+  background-color: #1e293b;
+  height: 100vh;
+  width: 40%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left .highlight {
+  color: #f39c12;
+}
+
+.login-left .title {
+  margin-top: 0px;
+  font-size: 35px;
+  letter-spacing: 4px;
+}
+
+.login-left .subtitle {
+  margin-top: 0px;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+/* Form container */
 .login-div {
-    background-color: #34495e;
-    padding: 30px;
-    border-radius: 8px;
-    width: 450px;
-    margin: 200px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    color: #ecf0f1;
-    font-size: 16px;
-    text-align: center;
+  background-color: #34495e;
+  padding: 30px;
+  border-radius: 8px;
+  width: 450px;
+  margin: 200px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #ecf0f1;
+  font-size: 16px;
+  text-align: center;
 }
 
 .login-div label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    text-align: left;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-align: left;
 }
 
 .login-div input {
-    width: 95%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: none;
-    font-size: 16px;
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
 }
 
+/* Password input wrapper */
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 20px;
+  top: 60%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Links wrapper */
+.login-links {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+/* Button */
 .login-div button {
-    width: 100%;
-    padding: 10px;
-    background-color: #f39c12;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-top: 10px;
 }
 
 .login-div button:hover {
-    background-color: #e67e22;
+  background-color: #e67e22;
 }
 
-.newuser-label{
-    text-decoration: none;
-    color: #f39c12;
+.newuser-label {
+  text-decoration: none;
+  color: #f39c12;
 }
 
-.forgot-password-label{
-    color: #f39c12;
+.forgot-password-label {
+  color: #f39c12;
+}
+
+/* -------------------- Responsive -------------------- */
+
+/* Tablet screens (up to 1024px) */
+@media (max-width: 1024px) {
+  .login-page {
+    gap: 80px; /* reduce gap between left and form */
+  }
+
+  .login-left {
+    width: 50%; /* a little wider for balance */
+  }
+
+  .login-div {
+    width: 100%;
+    margin: 120px auto;
+  }
+
+  .login-left .title {
+    font-size: 28px;
+  }
+
+  .login-left .subtitle {
+    font-size: 16px;
+  }
+}
+
+/* Mobile screens (up to 768px) */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column; /* stack vertically */
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-left {
+    width: 80%;
+    height: auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .login-left .title {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  .login-left .subtitle {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .login-div {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+
+
+    .login-wrapper{
+     width: 95%;
+    margin: auto;
+    padding: 5px;
+  }
+
+  .login-div{
+    width: 90%;
+    margin: auto;
+  }
+
+  .title-text{
+    font-size: x-large;
+  }
+}
+
+/* Small mobile (up to 480px) */
+@media (max-width: 480px) {
+  .login-left .title {
+    font-size: 20px;
+  }
+
+  .login-left{
+    width: 85%;
+    margin: auto;
+  }
+
+  .login-left .subtitle {
+    font-size: 13px;
+  }
+
+  .login-wrapper{
+     width: 95%;
+    margin: auto;
+    padding: 5px;
+  }
+
+  .login-div{
+    width: 90%;
+    margin: auto;
+  }
+
+  .login-wrapper{
+    margin: auto;
+  }
+
+  .login-div button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+    .login-links {
+        font-size: smaller;
+  }
 }

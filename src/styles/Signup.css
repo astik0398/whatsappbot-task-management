@@ -1,66 +1,264 @@
-/* Signup Page Styles */
+/* Page container */
+.signup-page {
+  display: flex;
+}
+
+/* Left section */
+.signup-left {
+  background-color: #1e293b;
+  height: 100vh;
+  width: 40%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signup-left .highlight {
+  color: #f39c12;
+}
+
+.signup-left .title {
+  margin-top: 0px;
+  font-size: 35px;
+  letter-spacing: 4px;
+}
+
+.signup-left .subtitle {
+  margin-top: 0px;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+/* Form container */
 .signup-div {
-    background-color: #34495e;
-    padding: 40px;
-    border-radius: 8px;
-    width: 550px;
-    margin: 110px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    color: #ecf0f1;
-    font-size: 16px;
-    text-align: center;
-    height: fit-content;
-    padding-bottom: 40px;
+  background-color: #34495e;
+  padding: 40px;
+  border-radius: 8px;
+  width: 550px;
+  margin: 110px auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #ecf0f1;
+  font-size: 16px;
+  text-align: center;
+  height: fit-content;
+  padding-bottom: 40px;
 }
 
-body{
-    background-color: #f1f5f9;
+/* Global body */
+body {
+  background-color: #f1f5f9;
 }
 
+/* Input fields layout */
 .signup-div .input-div {
-    display: flex;
-    gap: 40px;
+  display: flex;
+  gap: 40px;
 }
 
 .signup-div .input-div div {
-    width: 45%;
+  width: 45%;
 }
 
 .signup-div label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    text-align: left;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-align: left;
 }
 
 .signup-div input {
-    width: 95%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: none;
-    font-size: 16px;
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
 }
 
+.phone-wrapper {
+  margin-bottom: 20px;
+}
+
+/* Password input wrapper */
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 20px;
+  top: 55%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Button */
 .signup-div button {
-    width: 100%;
-    padding: 10px;
-    background-color: #f39c12;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-top: 20px;
 }
 
 .signup-div button:hover {
-    background-color: #e67e22;
+  background-color: #e67e22;
 }
 
-.newuser-label{
-    text-decoration: none;
-    color:#f39c12;
+/* Login link */
+.newuser-label {
+  text-decoration: none;
+  color: #f39c12;
+}
+
+/* Tablet & Mobile Screens (≤1024px) */
+@media (max-width: 1024px) {
+  body {
+    background-color: #1e293b; /* match mobile bg */
+  }
+
+  .signup-page {
+    flex-direction: column; /* stack left + form */
+    height: auto;
+  }
+
+  .signup-left {
+    width: 90%;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+  }
+
+    .highlight{
+    font-size: 45px;
+    letter-spacing: 5px; 
+  }
+
+  #title-text{
+    font-size: 30px;
+        letter-spacing: 10px; 
+
+  }
+
+  #subtitle{
+    font-size: x-large;
+  }
+
+  .signup-div {
+    width: 85%;
+    margin: 30px auto;
+    padding: 50px;
+    font-size: 14px;
+  }
+
+  .signup-div .input-div {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .signup-div .input-div div {
+    width: 100%;
+  }
+
+  .signup-div input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .signup-div button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+    .password-toggle{
+    margin-top: -3px;
+  }
+}
+
+/* Mobile Screens (≤640px) */
+@media (max-width: 640px) {
+  body {
+    background-color: #1e293b;
+  }
+
+  .signup-page {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .highlight{
+    font-size: xx-large;
+    letter-spacing: 5px; 
+  }
+
+  #title-text{
+    font-size: x-large;
+    letter-spacing: 5px;
+  }
+
+  #subtitle{
+    font-size: large;
+  }
+
+    .signup-div .input-div {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signup-left {
+    width: 88%;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+  }
+
+  .signup-div {
+    width: 90%;   /* reduced from 90% */
+    max-width: 350px; /* optional: keeps it neat on larger phones */
+    margin: 20px auto;
+    padding: 20px;
+    font-size: 14px;
+  }
+
+  .signup-div input {
+      width: 100%;
+    font-size: 14px;
+    margin: 0 auto;          /* center horizontally */
+    display: block;          /* make margin: auto work */
+    box-sizing: border-box;  /* include border & padding in width */
+}
+
+  .signup-div button {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .phone-wrapper{
+    width: 102%;
+    font-size: 14px;
+    margin: 10px auto;          /* center horizontally */
+    display: block;          /* make margin: auto work */
+    box-sizing: border-box;  
+  }
+
+  .password-wrapper{
+    margin-top: 10px;
+  }
+
+  .login-label{
+    margin-top: 10px;
+  }
+
+  .password-toggle{
+    margin-top: 8px;
+  }
 }
