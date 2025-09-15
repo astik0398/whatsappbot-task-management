@@ -397,12 +397,9 @@ function Table() {
     <>
       <div
       className="controls-container"
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
       >
-        <div style={{ marginLeft: "0px" }} className="tab-buttons">
+       <div id="left-col">
+         <div style={{ marginTop:'0px'}} className="tab-buttons">
           <button
             id="btn-all"
             className={activeTab === "all" ? "active" : ""}
@@ -433,14 +430,15 @@ function Table() {
           </button>
         </div>
 
-       <div>
+       <div id="search-input-div" >
          <input
           type="text"
           placeholder="Search tasks..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            id="search-input"
         />
+       </div>
        </div>
 
         <div className="view-toggle">

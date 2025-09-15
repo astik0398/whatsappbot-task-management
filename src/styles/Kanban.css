@@ -62,3 +62,60 @@
 .assignee {
   font-size: 14px;
 }
+
+/* Existing code remains unchanged */
+
+/* Tablet screens */
+@media (max-width: 1024px) {
+  .kanban-container {
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .kanban-column {
+    width: 250px;
+  }
+
+  .kanban-card h4 {
+    font-size: 13px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 768px) {
+  .kanban-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .kanban-column {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .kanban-column-header {
+    font-size: 14px;
+  }
+
+  .task-count {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
+  .kanban-card {
+    padding: 10px;
+  }
+
+  .kanban-card h4 {
+    font-size: 13px;
+  }
+
+  .kanban-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 12px;
+  }
+}

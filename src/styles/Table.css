@@ -36,7 +36,7 @@
 }
 
 .toggle-switch input[type="checkbox"]:checked + .slider {
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 
 .toggle-switch input[type="checkbox"]:checked + .slider:before {
@@ -48,7 +48,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .table th,
@@ -67,6 +67,11 @@
 .table tr {
   transition: background-color 0.2s ease;
   cursor: pointer;
+}
+
+#left-col{
+  display: flex;
+  gap: 20px;
 }
 
 /* Nested table */
@@ -122,13 +127,15 @@
   background-color: #fff;
 }
 
+#search-input-div{
+}
+
 /* Search box */
-.search-input {
-  width: 400px;
+#search-input {
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-right: 350px;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -191,8 +198,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
   gap: 20px;
+  width: 95%;
+  margin: auto;
 }
 
 /* toggle switch for board view/table view */
@@ -203,8 +211,6 @@
   gap: 10px;
   font-size: 14px;
   color: #333; /* Adjust based on theme */
-  margin-right: 30px;
-  width: 20%;
 }
 
 .view-label {
@@ -233,7 +239,7 @@
   right: 0;
   bottom: 0;
   background-color: #ff0000;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 24px;
 }
 
@@ -245,12 +251,12 @@
   left: 2px;
   bottom: 3px;
   background-color: rgb(255, 255, 255);
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
 .view-toggle-input:checked + .view-slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .view-toggle-input:checked + .view-slider:before {
@@ -261,19 +267,24 @@
 @media (max-width: 991px) {
   .controls-container {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* full width children */
+    gap: 10px;
   }
 
   .tab-buttons {
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    margin-bottom: 10px;
   }
 
   .search-input {
-    width: 70% !important;
+    width: 100% !important;
     margin: 0 auto;
+  }
+
+  .view-toggle {
+    width: 100%;
+    justify-content: center;
   }
 
   .table,
@@ -291,23 +302,28 @@
 
 /* Mobile fine-tuning */
 @media (max-width: 600px) {
-
-    .tab-buttons {
+  .tab-buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 per row */
-    gap: 8px;
+    gap: 6px;
     width: 100%;
   }
 
   .tab-buttons button {
-    width: 50%;
+    width: 100%;
     font-size: 14px;
     padding: 8px;
   }
 
   .search-input {
     width: 100% !important;
-    margin-top: 10px;
+    margin-top: 8px;
+  }
+
+  .view-toggle {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
   }
 
   .table,
