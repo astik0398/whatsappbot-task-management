@@ -13,6 +13,7 @@ import deleteLight from '../assets/deletelight.svg'
 import whatsappLight from '../assets/whatsapplight.svg'
 
 import moment from "moment";
+import Kanban from "./Kanban";
 
 function Table() {
   const [allTasks, setAllTasks] = useState([]);
@@ -30,11 +31,7 @@ function Table() {
     const [isTableView, setIsTableView] = useState(true); // default: Table view
 
       const handleToggle = () => {
-    setIsTableView((prev) => {
-      const newValue = !prev;
-      console.log(newValue ? "TABLE" : "BOARD");
-      return newValue;
-    });
+     setIsTableView((prev) => !prev);
   };
 
   const toggleRow = (index) => {
@@ -462,7 +459,7 @@ function Table() {
       </div>
 
       <div style={{ height: "600px", overflowY: "auto", marginTop: "10px" }}>
-        {filteredTasks.length > 0 ? (
+        {isTableView ? (filteredTasks.length > 0 ? (
          <div className="table-container">
            <table className="table">
             <thead>
@@ -673,7 +670,7 @@ function Table() {
             width={"70%"}
             src={noentriestransparent}
           />
-        )}
+        )) : <Kanban/>}
 
         {showModal && (
           <div

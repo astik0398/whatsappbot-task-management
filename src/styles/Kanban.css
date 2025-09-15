@@ -1,0 +1,64 @@
+.kanban-container {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+  overflow-x: auto;
+  margin: auto;
+  justify-content: center;
+}
+
+.kanban-column {
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  width: 300px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.kanban-column-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.task-count {
+  background: #e0e0e0;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.kanban-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.kanban-card h4 {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+}
+
+.kanban-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.kanban-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #555;
+}
+
+.assignee {
+  font-size: 14px;
+}
