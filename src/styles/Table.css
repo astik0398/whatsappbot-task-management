@@ -203,6 +203,10 @@
   margin: auto;
 }
 
+#all-btns img{
+  width: 20px;
+}
+
 /* toggle switch for board view/table view */
 
 .view-toggle {
@@ -373,4 +377,40 @@ justify-content: center;  }
   .table-cell.icons div {
     gap: 10px;
   }
+
+  .toggle-switch {
+  width: 35px;
+  height: 16px;
+}
+
+.toggle-switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  left:2px;
+  bottom: 2px;
+  background-color: #fff;
+  transition: 0.4s;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .slider:before {
+left: -10px;
+}
+
+#status-span{
+  font-size: 12px
+}
+
+#td-span{
+width: 140px;
+}
+
+#all-btns{
+  gap:20px;
+}
+#all-btns img{
+  width: 15px;
+}
 }

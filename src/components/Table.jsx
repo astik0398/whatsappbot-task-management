@@ -543,7 +543,7 @@ function Table() {
                                         Notes
                                       </th>
                                     )}
-                                    <th>Status</th>
+                                    <th id="td-span">Status</th>
                                     <th className="hide-on-mobile">Reason</th>
                                     <th className="hide-on-mobile">
                                       Started At
@@ -557,7 +557,7 @@ function Table() {
                                     <th>Action</th>
                                   </tr>
                                 </thead>
-                                <tbody>
+                                <tbody >
                                   {user.tasks
                                     .filter(
                                       (task) => task.task_details.trim() !== ""
@@ -611,8 +611,10 @@ function Table() {
                                             )}
                                           </td>
                                         )}
-                                        <td style={{ minWidth: "120px" }}>
+                                        <td 
+                                        style={{ minWidth: isMobile ? "60px" : "120px" }}>
                                           <span
+                                          id="status-span"
                                             style={{
                                               backgroundColor:
                                                 task.task_done === "Pending"
@@ -657,7 +659,7 @@ function Table() {
                                             "DD/MM/YYYY h:mm:ss A"
                                           )}
                                         </td>
-                                        <td>
+                                        <td id="toggle-rem">
                                           <label className="toggle-switch">
                                             <input
                                               type="checkbox"
@@ -691,8 +693,8 @@ function Table() {
                                             style={{
                                               display: "flex",
                                               justifyContent: "center",
-                                              gap: "30px",
                                             }}
+                                            id="all-btns"
                                           >
                                             {isMobile && (
                                               <span>
@@ -702,7 +704,6 @@ function Table() {
                                                       ? viewLight
                                                       : viewIcon
                                                   }
-                                                  style={{ width: "20px" }}
                                                   onClick={() =>
                                                     handleView(task)
                                                   }
@@ -717,7 +718,6 @@ function Table() {
                                                     ? editLight
                                                     : actionEdit
                                                 }
-                                                style={{ width: "20px" }}
                                                 onClick={() =>
                                                   handleEdit(task)
                                                 }
@@ -731,7 +731,6 @@ function Table() {
                                                     ? deleteLight
                                                     : actionDelete
                                                 }
-                                                style={{ width: "20px" }}
                                                 onClick={() =>
                                                   handleDelete(task)
                                                 }
