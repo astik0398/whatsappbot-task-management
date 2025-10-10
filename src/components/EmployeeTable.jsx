@@ -105,7 +105,7 @@ function EmployeeTable({flag, setFlag}) {
   async function refreshTasks() {
     try {
       const response = await fetch(
-        "https://whatsappbot-task-management-be-production.up.railway.app/refresh"
+        "https://task-backend-production-fcae.up.railway.app/refresh"
       );
       const result = await response.json();
       console.log("Tasks refreshed:", result);
