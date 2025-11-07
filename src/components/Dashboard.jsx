@@ -13,6 +13,8 @@ import Analytics from "./Analytics";
 import analyticsIcon from '../assets/analytics.svg'
 import meeting from '../assets/meeting.svg'
 import Meetings from "./Meetings";
+import notes from "../assets/notes.svg"
+import Notes from "./Notes";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("Dashboard");
@@ -119,6 +121,20 @@ const Dashboard = () => {
             <img width={"20px"} src={entriesIcon} alt="" />
             <p>All Tasks</p>
           </li>
+
+           <li
+            className={activeSection === "Notes" ? "active" : ""}
+            onClick={() => {
+              setActiveSection("Notes");
+              setShowUpload(false);
+              setIsSidebarOpen(false);
+            }}
+          >
+            <img width={"20px"} src={notes} alt="" />
+            <p>Notes</p>
+          </li>
+
+
           <li
             className={activeSection === "Meetings" ? "active" : ""}
             onClick={() => {
@@ -226,6 +242,8 @@ const Dashboard = () => {
         {activeSection === "Entries" && <Table />}
         {activeSection === "Settings" && <Settings />}
         {activeSection === "Meetings" && <Meetings />}
+        {activeSection === "Notes" && <Notes />}
+
       </div>
     </div>
   );

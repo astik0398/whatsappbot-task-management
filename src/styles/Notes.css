@@ -1,0 +1,163 @@
+.tasks-container {
+  height: 80vh; /* Full page height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem;
+}
+
+.tasks-wrapper {
+  background-color: #fff;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill parent height */
+  padding: 15px;
+  overflow: hidden; /* Prevent page scroll */
+}
+
+.tasks-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+/* ✅ Scrollable only for the task list */
+.scrollable-content {
+  flex: 1; /* take remaining height */
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar */
+.scrollable-content::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollable-content::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 6px;
+}
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Task styling */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-card {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.task-card:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.task-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.task-assignee {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.task-assignee-name {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.task-status {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 6px;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+.task-status.open {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+.task-status.closed {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 18px;
+}
+.expand-btn:hover {
+  color: #111827;
+}
+
+/* Related messages */
+.task-messages {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.messages-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.messages-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.message-item {
+  background-color: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.no-messages {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.loading-text {
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 40px;
+}
