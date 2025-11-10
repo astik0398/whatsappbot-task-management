@@ -43,26 +43,38 @@ export default function Notes() {
             <p className="loading-text">No tasks found.</p>
           ) : (
             <div className="tasks-list">
-              {tasks.map((task) => (
+              {tasks.map((task, index) => (
                 <div key={task.id} className="task-card">
                   <div className="task-header">
                     <div>
                       <h2 className="task-name">
-                        {task.task_title || "Untitled Task"}
+                        {index+1}. {task.task_title || "Untitled Task"}
                       </h2>
-                      <p className="task-assignee">
-                        Assigned to:{" "}
-                        <span className="task-assignee-name">
-                          {task.assignee || "Unassigned"}
-                        </span>
-                      </p>
-                      <p
+                     
+                     <p className="task-assignee">
+  Assigned to:{" "}
+  {Array.isArray(task.assignee) && task.assignee.length > 0 ? (
+    task.assignee.map((name, idx) => (
+      <span key={idx} className="assignee-pill">
+        {name.toUpperCase()}
+      </span>
+    ))
+  ) : (
+    <span className="task-assignee-name">Unassigned</span>
+  )}
+</p>
+
+                      <div style={{ display:'flex', justifyContent:'left', alignItems:'center', gap:'5px'}}>
+                        <p className="task-assignee"> Status:</p>
+                       
+                        <p
                         className={`task-status ${
                           task.status === "open" ? "open" : "closed"
                         }`}
                       >
                         {task.status}
                       </p>
+                      </div>
                     </div>
 
                     <button
