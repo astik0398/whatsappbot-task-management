@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, CircleX  } from "lucide-react";
 import supabase from "../supabaseClient";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "../styles/Notes.css";
+
 
 export default function Notes() {
   const [tasks, setTasks] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [loading, setLoading] = useState(true);
+
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -15,6 +17,7 @@ export default function Notes() {
       .from("group_notes")
       .select("*")
       .order("id", { ascending: false });
+
 
     if (error) {
       console.error("Error fetching tasks:", error);
@@ -24,13 +27,16 @@ export default function Notes() {
     setLoading(false);
   };
 
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
+
   const toggleExpand = (taskId) => {
     setExpanded((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
   };
+
 
   const handleDeleteTask = async (taskId) => {
     try {
@@ -39,10 +45,12 @@ export default function Notes() {
         .delete()
         .eq("id", taskId);
 
+
       if (error) {
         console.error("Error deleting task:", error);
         return;
       }
+
 
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
@@ -52,29 +60,35 @@ export default function Notes() {
     }
   };
 
+
   const handleDeleteMessage = async (taskId, msgIndex) => {
     try {
       const taskToUpdate = tasks.find((t) => t.id === taskId);
       if (!taskToUpdate) return;
 
+
       const updatedMessages = taskToUpdate.related_messages.filter(
         (_, i) => i !== msgIndex
       );
+
 
       const { error } = await supabase
         .from("group_notes")
         .update({ related_messages: updatedMessages })
         .eq("id", taskId);
 
+
       if (error) {
         console.error("Error deleting message:", error);
         return;
       }
 
+
       const updatedTasks = tasks.map((task) =>
         task.id === taskId ? { ...task, related_messages: updatedMessages } : task
       );
       setTasks(updatedTasks);
+
 
       console.log(`Message ${msgIndex} deleted successfully from Supabase`);
     } catch (err) {
@@ -82,33 +96,52 @@ export default function Notes() {
     }
   };
 
-  // 🔥 Handle drag and drop between tasks
+
+  // 🔥 Handle drag and drop between tasks (for messages)
   const handleDragEnd = async (result) => {
-    const { source, destination } = result;
+    const { source, destination, type } = result;
+
 
     if (!destination) return;
 
+
+    // Handle assignee drag and drop
+    if (type === "assignee") {
+      return handleAssigneeDragEnd(result);
+    }
+
+
+    // Handle message drag and drop
     // Prevent dropping into same list
     if (source.droppableId === destination.droppableId) return;
 
+
     const sourceTaskIndex = tasks.findIndex(
-      (task) => task.id.toString() === source.droppableId
+      (task) => task.id.toString() === source.droppableId.replace("task-messages-", "")
     );
     const destTaskIndex = tasks.findIndex(
-      (task) => task.id.toString() === destination.droppableId
+      (task) => task.id.toString() === destination.droppableId.replace("task-messages-", "")
     );
+
+
+    if (sourceTaskIndex === -1 || destTaskIndex === -1) return;
+
 
     const sourceTask = tasks[sourceTaskIndex];
     const destTask = tasks[destTaskIndex];
 
+
     const draggedMsg = sourceTask.related_messages[source.index];
+
 
     // Update source and destination arrays
     const updatedSourceMsgs = Array.from(sourceTask.related_messages);
     updatedSourceMsgs.splice(source.index, 1);
 
+
     const updatedDestMsgs = Array.from(destTask.related_messages || []);
     updatedDestMsgs.splice(destination.index, 0, draggedMsg);
+
 
     // Update local state first for smooth UI
     const updatedTasks = tasks.map((task, i) => {
@@ -120,6 +153,7 @@ export default function Notes() {
     });
     setTasks(updatedTasks);
 
+
     // Sync with Supabase
     try {
       const { error: srcError } = await supabase
@@ -127,10 +161,12 @@ export default function Notes() {
         .update({ related_messages: updatedSourceMsgs })
         .eq("id", sourceTask.id);
 
+
       const { error: destError } = await supabase
         .from("group_notes")
         .update({ related_messages: updatedDestMsgs })
         .eq("id", destTask.id);
+
 
       if (srcError || destError) {
         console.error("Error updating Supabase after drag:", srcError || destError);
@@ -140,10 +176,126 @@ export default function Notes() {
     }
   };
 
+
+  // 🔥 NEW: Handle assignee drag and drop between tasks
+  const handleAssigneeDragEnd = async (result) => {
+    const { source, destination } = result;
+
+
+    if (!destination) return;
+
+
+    // Prevent dropping assignee in the same task
+    const sourceTaskId = parseInt(source.droppableId.replace("task-assignees-", ""));
+    const destTaskId = parseInt(destination.droppableId.replace("task-assignees-", ""));
+
+
+    if (sourceTaskId === destTaskId) return;
+
+
+    const sourceTaskIndex = tasks.findIndex((task) => task.id === sourceTaskId);
+    const destTaskIndex = tasks.findIndex((task) => task.id === destTaskId);
+
+
+    if (sourceTaskIndex === -1 || destTaskIndex === -1) return;
+
+
+    const sourceTask = tasks[sourceTaskIndex];
+    const destTask = tasks[destTaskIndex];
+
+
+    const draggedAssignee = sourceTask.assignee?.[source.index];
+
+
+    if (!draggedAssignee) return;
+
+
+    // Remove assignee from source task
+    const updatedSourceAssignees = sourceTask.assignee.filter(
+      (_, i) => i !== source.index
+    );
+
+
+    // Add assignee to destination task (at the specified index)
+    const updatedDestAssignees = Array.from(destTask.assignee || []);
+    updatedDestAssignees.splice(destination.index, 0, draggedAssignee);
+
+
+    // Update local state first for smooth UI
+    const updatedTasks = tasks.map((task, i) => {
+      if (i === sourceTaskIndex)
+        return { ...task, assignee: updatedSourceAssignees };
+      if (i === destTaskIndex)
+        return { ...task, assignee: updatedDestAssignees };
+      return task;
+    });
+    setTasks(updatedTasks);
+
+
+    // Sync with Supabase
+    try {
+      const { error: srcError } = await supabase
+        .from("group_notes")
+        .update({ assignee: updatedSourceAssignees })
+        .eq("id", sourceTask.id);
+
+
+      const { error: destError } = await supabase
+        .from("group_notes")
+        .update({ assignee: updatedDestAssignees })
+        .eq("id", destTask.id);
+
+
+      if (srcError || destError) {
+        console.error("Error updating Supabase after assignee drag:", srcError || destError);
+      }
+    } catch (err) {
+      console.error("Unexpected error updating assignees after drag:", err);
+    }
+  };
+
+
+  const handleDeleteAssignee = async (taskId, assigneeName) => {
+    try {
+      const taskToUpdate = tasks.find((t) => t.id === taskId);
+      if (!taskToUpdate) return;
+
+
+      const updatedAssignees = (taskToUpdate.assignee || []).filter(
+        (a) => a !== assigneeName
+      );
+
+
+      const { error } = await supabase
+        .from("group_notes")
+        .update({ assignee: updatedAssignees })
+        .eq("id", taskId);
+
+
+      if (error) {
+        console.error("Error deleting assignee:", error);
+        return;
+      }
+
+
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId ? { ...task, assignee: updatedAssignees } : task
+      );
+      setTasks(updatedTasks);
+
+
+      console.log(`Assignee "${assigneeName}" deleted successfully from task ${taskId}`);
+    } catch (err) {
+      console.error("Unexpected error deleting assignee:", err);
+    }
+  };
+
+
   return (
     <div className="tasks-container">
       <div className="tasks-wrapper">
         <h1 className="tasks-title">📋 Task Management Board</h1>
+
 
         <div className="scrollable-content">
           {loading ? (
@@ -161,18 +313,81 @@ export default function Notes() {
                           {index + 1}. {task.task_title || "Untitled Task"}
                         </h2>
 
+
                         <p style={{textAlign:'left'}} className="task-assignee">
                           Assigned to:{" "}
-                          {Array.isArray(task.assignee) && task.assignee.length > 0 ? (
-                            task.assignee.map((name, idx) => (
-                              <span key={idx} className="assignee-pill">
-                                {name.toUpperCase()}
+                          <Droppable
+                            droppableId={`task-assignees-${task.id}`}
+                            type="assignee"
+                            direction="horizontal"
+                          >
+                            {(provided, snapshot) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                style={{
+                                  gap: "5px",
+                                  minHeight: "24px",
+                                  padding: "2px 4px",
+                                  borderRadius: "4px",
+                                  backgroundColor: snapshot.isDraggingOver
+                                    ? "rgba(59, 130, 246, 0.1)"
+                                    : "transparent"                                }}
+                              >
+                                {Array.isArray(task.assignee) &&
+                                task.assignee.length > 0 ? (
+                                  task.assignee.map((name, idx) => (
+                                    <Draggable
+                                      key={`assignee-${task.id}-${idx}`}
+                                      draggableId={`assignee-${task.id}-${idx}`}
+                                      index={idx}
+                                    >
+                                      {(provided, snapshot) => (
+                                        <span
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                          className="assignee-pill"
+                                          style={{
+                                            ...provided.draggableProps.style,
+                                            opacity: snapshot.isDragging ? 0.5 : 1,
+                                                                                padding:'4px 6px'
+
+                                          }}
+                                        >
+                                          {name.toUpperCase()}
+
+                                          <button
+                                            onClick={() =>
+                                              handleDeleteAssignee(task.id, name)
+                                            }
+                                            className="delete-assignee-btn"
+                                            title="Remove Assignee"
+                                            style={{
+                                              background: "transparent",
+                                              border: "none",
+                                              cursor: "pointer",
+                                              marginLeft: "5px",
+                                              verticalAlign: "middle",
+                                            }}
+                                          >
+                                            <CircleX size={14} color="red" />
+                                          </button>
+                                        </span>
+                                      )}
+                                    </Draggable>
+                                  ))
+                                ) : (
+                                  <span className="task-assignee-name">
+                                    Unassigned
+                                  </span>
+                                )}
+                                {provided.placeholder}
                               </span>
-                            ))
-                          ) : (
-                            <span className="task-assignee-name">Unassigned</span>
-                          )}
+                            )}
+                          </Droppable>
                         </p>
+
 
                         <div
                           style={{
@@ -184,6 +399,7 @@ export default function Notes() {
                         >
                           <p className="task-assignee"> Status:</p>
 
+
                           <p
                             className={`task-status ${
                               task.status === "open" ? "open" : "closed"
@@ -193,6 +409,7 @@ export default function Notes() {
                           </p>
                         </div>
                       </div>
+
 
                       <div
                         style={{
@@ -216,6 +433,7 @@ export default function Notes() {
                           <Trash2 size={20} color="gray" />
                         </button>
 
+
                         <button
                           onClick={() => toggleExpand(task.task_id)}
                           className="expand-btn"
@@ -225,8 +443,12 @@ export default function Notes() {
                       </div>
                     </div>
 
+
                     {expanded[task.task_id] && (
-                      <Droppable droppableId={task.id.toString()}>
+                      <Droppable
+                        droppableId={`task-messages-${task.id}`}
+                        type="message"
+                      >
                         {(provided, snapshot) => (
                           <div
                             className={`task-messages ${

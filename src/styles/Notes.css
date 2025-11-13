@@ -172,3 +172,10 @@
   font-size: 0.85rem;
   font-weight: 400;
 }
+
+.delete-assignee-btn svg {
+  transition: transform 0.2s ease;
+}
+.delete-assignee-btn:hover svg {
+  transform: scale(1.2);
+}
