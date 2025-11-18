@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, Trash2, CircleX  } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, CircleX, Link  } from "lucide-react";
 import supabase from "../supabaseClient";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "../styles/Notes.css";
@@ -483,7 +483,21 @@ export default function Notes() {
                                         {...provided.dragHandleProps}
                                         className="message-item"
                                       >
-                                        {msg}
+
+                                         <div style={{display:'flex', justifyContent:'space-between'}}>
+                                          <div style={{  display:'flex', alignItems:'center', gap:'30px'}}>
+                                           <div>{msg.split("\n")[0]}</div>
+
+                                            {/* Attachment Section */}
+  {msg.split("\n")[1] && (
+    <div>
+      <a style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:'4px'}} href={msg.split("\n")[1]} target="_blank" rel="noopener noreferrer">
+      <Link width={'12px'}/>  Attachment
+      </a>
+    </div>
+  )}
+                                         </div>
+
                                         <button
                                           onClick={() =>
                                             handleDeleteMessage(task.id, i)
@@ -498,6 +512,7 @@ export default function Notes() {
                                         >
                                           <Trash2 size={16} color="red" />
                                         </button>
+                                         </div>
                                       </li>
                                     )}
                                   </Draggable>
