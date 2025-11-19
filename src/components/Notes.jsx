@@ -467,53 +467,95 @@ export default function Notes() {
                                     index={i}
                                   >
                                     {(provided, snapshot) => (
-                                      <li
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          background: snapshot.isDragging
-                                            ? "#dbeafe"
-                                            : "white",
-                                          borderRadius: "6px",
-                                          padding: "6px",
-                                          marginBottom: "5px",
-                                        }}
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        className="message-item"
-                                      >
+                                     <li
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    background: snapshot.isDragging ? "#dbeafe" : "white",
+    borderRadius: "6px",
+    padding: "6px",
+    marginBottom: "5px",
+  }}
+  ref={provided.innerRef}
+  {...provided.draggableProps}
+  {...provided.dragHandleProps}
+  className="message-item"
+>
+  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '30px', flexWrap: 'wrap' }}>
+      {/* Message Text - First line */}
+      <div>{msg.split("\n")[0]}</div>
 
-                                         <div style={{display:'flex', justifyContent:'space-between'}}>
-                                          <div style={{  display:'flex', alignItems:'center', gap:'30px'}}>
-                                           <div>{msg.split("\n")[0]}</div>
+      {/* Attachment Section - Handle multiple URLs */}
+      {(() => {
+        const lines = msg.split("\n");
+        // Get all lines after the first one (these are media URLs)
+        const mediaUrls = lines.slice(1).filter(url => url.trim());
+        
+        if (mediaUrls.length === 0) return null;
 
-                                            {/* Attachment Section */}
-  {msg.split("\n")[1] && (
-    <div>
-      <a style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:'4px'}} href={msg.split("\n")[1]} target="_blank" rel="noopener noreferrer">
-      <Link width={'12px'}/>  Attachment
-      </a>
+        // Single attachment
+        if (mediaUrls.length === 1) {
+          return (
+            <div>
+              <a
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+                href={mediaUrls[0]}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Link width={'12px'} /> Attachment
+              </a>
+            </div>
+          );
+        }
+
+        // Multiple attachments
+        return (
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {mediaUrls.map((url, index) => (
+              <a
+                key={index}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '12px'
+                }}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Link width={'12px'} /> Attachment {index + 1}
+              </a>
+            ))}
+          </div>
+        );
+      })()}
     </div>
-  )}
-                                         </div>
 
-                                        <button
-                                          onClick={() =>
-                                            handleDeleteMessage(task.id, i)
-                                          }
-                                          className="delete-message-btn"
-                                          title="Delete Message"
-                                          style={{
-                                            background: "transparent",
-                                            cursor: "pointer",
-                                            border: "none",
-                                          }}
-                                        >
-                                          <Trash2 size={16} color="red" />
-                                        </button>
-                                         </div>
-                                      </li>
+    <button
+      onClick={() => handleDeleteMessage(task.id, i)}
+      className="delete-message-btn"
+      title="Delete Message"
+      style={{
+        background: "transparent",
+        cursor: "pointer",
+        border: "none",
+      }}
+    >
+      <Trash2 size={16} color="red" />
+    </button>
+  </div>
+</li>
                                     )}
                                   </Draggable>
                                 ))}
